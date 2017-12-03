@@ -4,33 +4,30 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Rigidbody))]
-public class PodRacerScript : MonoBehaviour {
+public class PodRacerScriptAlternative : MonoBehaviour {
     public GameObject[] hoverPoints;
     public LayerMask hoverMask; // so we don't Raycast to ourself
     public Text speedIndicator;
 
     // acceleration settings
-    public AnimationCurve accelCurve;
-    public AnimationCurve brakeCurve;
-    public AnimationCurve speedCurve;
-    public float currentAccelFactor = 0f;
-    public float currentBrakeFactor = 0f;
-    public float currentSpeedFactor = 0f;
+    public float forwardAcceleration = 350f;
+    public float backwardAcceleration = 100f;
 
-    public float currentSpeed = 0f;
+    private float currentForwardAccel = 0f;
+    private float currentBackwardAccel = 0f;
 
     // turn settings
-    public float turnSpeed = 2f;
+    public float turnForce = 50f;
 
     private float currentTurnForce = 0f;
 
     // hover settings
-    private float hoverHeight = 0.5f;
-    private float hoverForce = 10f;
+    public float hoverHeight = 0.5f;
+    public float hoverForce = 1f;
 
     // controls
     private bool forward;
-    private bool brake;
+    private bool backward;
     private bool left;
     private bool right;
 
@@ -44,35 +41,18 @@ public class PodRacerScript : MonoBehaviour {
 
     private void Update () {
         forward = Input.GetKey(KeyCode.Z) || Input.GetKey(KeyCode.UpArrow);
-        brake = Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow);
+        backward = Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow);
         left = Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.LeftArrow);
         right = Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow);
 
-        if (forward)
-        {
-            currentAccelFactor += Time.deltaTime / 1f; // 1 sec to reach max acceleration
+        currentForwardAccel = forward ? forwardAcceleration * rb.mass : 0f;
+        currentBackwardAccel = backward ? backwardAcceleration * rb.mass : 0f;
 
-            currentAccelFactor = Mathf.Clamp(currentAccelFactor, 0f, 1f);
+        currentTurnForce = 0f;
+        currentTurnForce -= left ? turnForce * rb.mass : 0f;
+        currentTurnForce += right ? turnForce * rb.mass : 0f;
 
-            currentSpeedFactor += accelCurve.Evaluate(currentAccelFactor) * Time.deltaTime / 10f; // 10 sec to reach max speed (at max acceleration)
-
-            currentSpeedFactor = Mathf.Clamp(currentSpeedFactor, 0f, 1f);
-
-            
-        }
-        else
-        {
-            currentAccelFactor -= Time.deltaTime / 1f; // 1 sec to loose acceleration
-
-            currentAccelFactor = Mathf.Clamp(currentAccelFactor, 0f, 1f);
-
-            currentSpeedFactor *= 0.999f;
-
-            currentSpeedFactor = Mathf.Clamp(currentSpeedFactor, 0f, 1f);
-        }
-
-        currentSpeed = speedCurve.Evaluate(currentSpeedFactor);
-
+        speedIndicator.text =  (int)rb.velocity.magnitude+"";
     }
 
     private void FixedUpdate()
@@ -92,24 +72,10 @@ public class PodRacerScript : MonoBehaviour {
                 rb.AddForceAtPosition(hit.normal * -hoverForce * rb.mass * (1.0f - (hit.distance / hoverHeight)), hoverPoint.transform.position);
             }
         }
-        rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, currentSpeed);
 
-        if (currentBrakeFactor > 0f)
-        {
-            float forwardVelocity = rb.velocity.z;
-            if (rb.velocity.z > 0f)
-            {
-                rb.velocity -= new Vector3(0f, 0f, brakeCurve.Evaluate(currentBrakeFactor));
-                Debug.Log(brakeCurve.Evaluate(currentBrakeFactor));
-            }
-            Debug.Log("on freine !");
-        }
+        rb.AddForce(transform.forward * currentForwardAccel);
+        rb.AddForce(-transform.forward * currentBackwardAccel);
 
         rb.AddRelativeTorque(Vector3.up * currentTurnForce);
-    }
-
-    private void LateUpdate()
-    {
-        speedIndicator.text = (int)(rb.velocity.z*10*3.6) + " km/h";
     }
 }
