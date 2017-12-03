@@ -147,7 +147,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1483214763850726}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.269, z: -0.902}
+  m_LocalPosition: {x: 0, y: 0.109, z: -0.902}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4384799061664018}
@@ -185,8 +185,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1823976161970934}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.76, y: 2.65, z: -19.51}
+  m_LocalRotation: {x: -0, y: 0.7181566, z: -0, w: 0.69588166}
+  m_LocalPosition: {x: -5.36, y: 62.5, z: -9.54}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4129027022782548}
@@ -198,7 +198,7 @@ Transform:
   - {fileID: 4312386951376104}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 91.80501, z: 0}
 --- !u!4 &4414443127552094
 Transform:
   m_ObjectHideFlags: 1
@@ -334,7 +334,7 @@ Rigidbody:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1823976161970934}
   serializedVersion: 2
-  m_Mass: 500
+  m_Mass: 400
   m_Drag: 0
   m_AngularDrag: 20
   m_UseGravity: 0
@@ -389,12 +389,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c65f040e67f1d447a3461f5e1b4bf2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hoverPoints:
-  - {fileID: 1823256874564866}
-  - {fileID: 1244232274382918}
-  - {fileID: 1166858083108554}
-  - {fileID: 1971279707408282}
-  - {fileID: 1317501914817104}
+  hoverPoint: {fileID: 1317501914817104}
   hoverMask:
     serializedVersion: 2
     m_Bits: 4294967039
@@ -445,11 +440,11 @@ MonoBehaviour:
       outSlope: 1
       tangentMode: 0
     - serializedVersion: 2
-      time: 0.6286372
-      value: 25.888914
-      inSlope: 41.1826
-      outSlope: 1.1048666
-      tangentMode: 69
+      time: 0.3722061
+      value: 22.078478
+      inSlope: 12.520936
+      outSlope: 12.520936
+      tangentMode: 0
     - serializedVersion: 2
       time: 1.0002439
       value: 26.29949
@@ -459,11 +454,11 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
-  currentAccelFactor: 0
-  currentBrakeFactor: 0
-  currentSpeedFactor: 0
-  currentSpeed: 0
-  turnSpeed: 2
+  timeToFullspeed: 20
+  timeToFullAcceleration: 1
+  maxTurnSpeed: 5
+  turnSpeedFactor: 2
+  gravityForce: {x: 0, y: 0, z: 0}
 --- !u!124 &124753698552948440
 Behaviour:
   m_ObjectHideFlags: 1
