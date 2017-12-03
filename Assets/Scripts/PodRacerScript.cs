@@ -132,18 +132,17 @@ public class PodRacerScript : MonoBehaviour {
     private void FixedUpdate()
     {
         #region Hover Detection
+        Vector3 normalVector = Vector3.zero;
 
-        Vector3 groundVector = Vector3.zero;
-        Debug.DrawRay(hoverPoint.transform.position, Vector3.down * hoverHeight, Color.red, 0.1f);
+       
+
         RaycastHit hit;
-        if (Physics.Raycast(hoverPoint.transform.position, Vector3.down, out hit, hoverHeight, hoverMask.value))                // if we are close enough to the ground, apply anti-gravity effect
+
+        if (Physics.Raycast(hoverPoint.transform.position, -transform.up, out hit, hoverHeight, hoverMask.value)) // if we are close enough to the ground, apply anti-gravity effect
         {
-            float gravityFactor = hit.distance / hoverHeight;
-            gravityVector = gravityVector * gravityFactor;
-            //gravityVector = Vector3.zero;
-            //groundVector =  hit.normal; // using hit normal so the pod slides off the surface
-            //Debug.DrawRay(hit.point, hit.normal, Color.green, 0.1f);
-            
+            gravityVector = Vector3.zero;
+            normalVector = hit.normal;
+            normalVector.y = 0f;
             //Debug.Log("<color=green>touched "+hit.collider.gameObject.name +"</color>");
         }
         else // if we are not close to the ground, make that part of the pod fall
@@ -160,9 +159,8 @@ public class PodRacerScript : MonoBehaviour {
         
         #endregion
 
-        Debug.Log(forwardVector + " , " + gravityVector + " , " + groundVector);
-        rb.velocity = forwardVector + gravityVector + groundVector;
-
+        Debug.Log(forwardVector + " , " + gravityVector + " , " + normalVector);
+        rb.velocity = forwardVector + gravityVector + normalVector;
 
         #region Turning
 
@@ -174,9 +172,26 @@ public class PodRacerScript : MonoBehaviour {
     // Using this to update UI
     private void LateUpdate()
     {
-        speedIndicator.text = (int)(rb.velocity.magnitude * 10f * 3.6f) + " km/h";
+        Vector3 speedS = rb.velocity;
+        speedS.y = 0;
+        speedIndicator.text = (int)(speedS.magnitude * 10f * 3.6f) + " km/h";
     }
-    
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawRay(hoverPoint.transform.position, -transform.up * hoverHeight);
+        
+        RaycastHit hit;
+        if (Physics.Raycast(hoverPoint.transform.position, -transform.up, out hit, hoverHeight, hoverMask.value))                // if we are close enough to the ground, draw the impact
+        {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawRay(hit.point, hit.normal);
+            Gizmos.color = Color.blue;
+            Gizmos.DrawSphere(hit.point, 0.02f);
+        }
+    }
+
     #region Speed Approximation methods
 
     private float GetFactorForSpeed(int speed, ref float factor)
