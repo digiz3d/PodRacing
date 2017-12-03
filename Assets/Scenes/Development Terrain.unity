@@ -407,12 +407,12 @@ Prefab:
     - target: {fileID: 114479751802163218, guid: b8d5c352b9a21b34a931143b2f16f53c,
         type: 2}
       propertyPath: speedCurve.m_Curve.Array.data[1].value
-      value: 24.46934
+      value: 22.078478
       objectReference: {fileID: 0}
     - target: {fileID: 114479751802163218, guid: b8d5c352b9a21b34a931143b2f16f53c,
         type: 2}
       propertyPath: speedCurve.m_Curve.Array.data[1].time
-      value: 0.5871719
+      value: 0.3722061
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b8d5c352b9a21b34a931143b2f16f53c, type: 2}
