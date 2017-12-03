@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,8 +17,10 @@ public class PodRacerScript : MonoBehaviour {
     public float currentAccelFactor = 0f;
     public float currentBrakeFactor = 0f;
     public float currentSpeedFactor = 0f;
-
     public float currentSpeed = 0f;
+
+    private Dictionary<float, float> speedCurveApproximation;
+    private float speedCurveApproximationPrecision = 0.01f; // 1% precision
 
     // turn settings
     public float turnSpeed = 2f;
@@ -39,7 +42,49 @@ public class PodRacerScript : MonoBehaviour {
 
     private void Start () {
         rb = GetComponent<Rigidbody>();
-        //podRacersMask = ~(1 << LayerMask.NameToLayer("Pods"));
+
+        speedCurveApproximation = new Dictionary<float, float>();
+
+
+        #region Speed Curve Approximation
+        float speed = 0f;
+        float time = 0f;
+        while (speed < speedCurve.Evaluate(1f))
+        {
+            speed = speedCurve.Evaluate(time);
+            float roundedSpeed = roundSpeed(speed);
+            
+            if (!speedCurveApproximation.ContainsKey(roundedSpeed))
+            {
+                speedCurveApproximation.Add(roundedSpeed, time);
+                Debug.Log("<color=green>added speed " + roundedSpeed + " : " + time+"</color>");
+            }
+            else
+            {
+                Debug.Log("<color=red>duplicated entry at " + roundedSpeed + " : "+ time +"</color>");
+            }
+            
+            time += speedCurveApproximationPrecision;
+        }
+        #endregion
+
+        Debug.Log("speed 23.8 is achieved at ratio " + GetRatioForSpeed(23.8f));
+    }
+
+    private float GetRatioForSpeed(float speed)
+    {
+        while (!speedCurveApproximation.ContainsKey(speed))
+        {
+            speed -= 0.1f;
+            speed = roundSpeed(speed); // avoid floating points inaccuracy (some numbers were like 23.69999 instead of 23.7)
+        }
+        Debug.Log("returning the closest lower speed ratio : " + speed);
+        return speedCurveApproximation[speed];
+    }
+
+    private float roundSpeed(float speed)
+    {
+        return Mathf.Round(speed * 10f) / 10f;
     }
 
     private void Update () {
@@ -50,28 +95,22 @@ public class PodRacerScript : MonoBehaviour {
 
         if (forward)
         {
-            currentAccelFactor += Time.deltaTime / 1f; // 1 sec to reach max acceleration
-
+            currentAccelFactor += Time.deltaTime / 1f;                                              // 1 sec to reach max acceleration
             currentAccelFactor = Mathf.Clamp(currentAccelFactor, 0f, 1f);
-
-            currentSpeedFactor += accelCurve.Evaluate(currentAccelFactor) * Time.deltaTime / 10f; // 10 sec to reach max speed (at max acceleration)
-
+            currentSpeedFactor += accelCurve.Evaluate(currentAccelFactor) * Time.deltaTime / 10f;   // 10 sec to reach max speed (at max acceleration)
             currentSpeedFactor = Mathf.Clamp(currentSpeedFactor, 0f, 1f);
-
-            
+            currentSpeed = speedCurve.Evaluate(currentSpeedFactor);
         }
         else
         {
-            currentAccelFactor -= Time.deltaTime / 1f; // 1 sec to loose acceleration
-
+            currentAccelFactor -= Time.deltaTime / 1f;                                              // 1 sec to loose acceleration
             currentAccelFactor = Mathf.Clamp(currentAccelFactor, 0f, 1f);
-
-            currentSpeedFactor *= 0.999f;
-
+            currentSpeed *= 0.9994f;
+            currentSpeedFactor = GetRatioForSpeed(currentSpeed);                                    // get the approximated speedFactor
             currentSpeedFactor = Mathf.Clamp(currentSpeedFactor, 0f, 1f);
         }
 
-        currentSpeed = speedCurve.Evaluate(currentSpeedFactor);
+        
 
     }
 
@@ -96,7 +135,6 @@ public class PodRacerScript : MonoBehaviour {
 
         if (currentBrakeFactor > 0f)
         {
-            float forwardVelocity = rb.velocity.z;
             if (rb.velocity.z > 0f)
             {
                 rb.velocity -= new Vector3(0f, 0f, brakeCurve.Evaluate(currentBrakeFactor));
