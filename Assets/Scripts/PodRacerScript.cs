@@ -20,7 +20,7 @@ public class PodRacerScript : MonoBehaviour {
     public float currentSpeed = 0f;
 
     private Dictionary<int, float> speedCurveApproximation;  // key = speed in m/s , value = factor from 0f to 1f;
-    private float speedCurveApproximationPrecision = 0.001f; // 1% precision
+    private float speedCurveApproximationPrecision = 0.00001f; // lower =  more accurate speeds but slower loading times
 
     // turn settings
     public float turnSpeed = 2f;
@@ -83,11 +83,6 @@ public class PodRacerScript : MonoBehaviour {
         return speedCurveApproximation[speed];
     }
 
-    private float roundSpeed(float speed)
-    {
-        return Mathf.Round(speed * 10f) / 10f;
-    }
-
     private void Update () {
         forward = Input.GetKey(KeyCode.Z) || Input.GetKey(KeyCode.UpArrow);
         brake = Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow);
@@ -110,9 +105,6 @@ public class PodRacerScript : MonoBehaviour {
             currentSpeedFactor = GetRatioForSpeed((int)(currentSpeed*10f));                                    // get the approximated speedFactor
             currentSpeedFactor = Mathf.Clamp(currentSpeedFactor, 0f, 1f);
         }
-
-        
-
     }
 
     private void FixedUpdate()
