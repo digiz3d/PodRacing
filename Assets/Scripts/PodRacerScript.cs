@@ -19,8 +19,8 @@ public class PodRacerScript : MonoBehaviour {
     public float currentSpeedFactor = 0f;
     public float currentSpeed = 0f;
 
-    private Dictionary<float, float> speedCurveApproximation;
-    private float speedCurveApproximationPrecision = 0.01f; // 1% precision
+    private Dictionary<int, float> speedCurveApproximation;  // key = speed in m/s , value = factor from 0f to 1f;
+    private float speedCurveApproximationPrecision = 0.001f; // 1% precision
 
     // turn settings
     public float turnSpeed = 2f;
@@ -43,42 +43,43 @@ public class PodRacerScript : MonoBehaviour {
     private void Start () {
         rb = GetComponent<Rigidbody>();
 
-        speedCurveApproximation = new Dictionary<float, float>();
+        speedCurveApproximation = new Dictionary<int, float>();
 
 
         #region Speed Curve Approximation
-        float speed = 0f;
-        float time = 0f;
-        while (speed < speedCurve.Evaluate(1f))
+        int speed = 0;
+        float lastFactor = 0f;
+        while(speed <= (speedCurve.Evaluate(1f)*10))
         {
-            speed = speedCurve.Evaluate(time);
-            float roundedSpeed = roundSpeed(speed);
-            
-            if (!speedCurveApproximation.ContainsKey(roundedSpeed))
-            {
-                speedCurveApproximation.Add(roundedSpeed, time);
-                Debug.Log("<color=green>added speed " + roundedSpeed + " : " + time+"</color>");
-            }
-            else
-            {
-                Debug.Log("<color=red>duplicated entry at " + roundedSpeed + " : "+ time +"</color>");
-            }
-            
-            time += speedCurveApproximationPrecision;
+            float factor = GetFactorForSpeed(speed, ref lastFactor);
+            lastFactor = factor;
+            speedCurveApproximation.Add(speed, factor);
+            speed += 1;
+            Debug.Log("<color=green>added " + speed +" = "+ factor+"</color>");
         }
         #endregion
 
-        Debug.Log("speed 23.8 is achieved at ratio " + GetRatioForSpeed(23.8f));
+        Debug.Log("speed 238 m/s (or 23.8 unity units/s) is achieved at ratio " + GetRatioForSpeed(238));
     }
 
-    private float GetRatioForSpeed(float speed)
+    private float GetFactorForSpeed(int speed, ref float factor)
+    {
+        float speedFromCurve = speedCurve.Evaluate(factor) * 10;
+        while (speed > speedFromCurve)
+        {
+            factor += speedCurveApproximationPrecision;
+            speedFromCurve = speedCurve.Evaluate(factor) * 10;
+        }
+        return factor;
+    }
+
+    private float GetRatioForSpeed(int speed)
     {
         while (!speedCurveApproximation.ContainsKey(speed))
         {
-            speed -= 0.1f;
-            speed = roundSpeed(speed); // avoid floating points inaccuracy (some numbers were like 23.69999 instead of 23.7)
+            speed -= 1;
         }
-        Debug.Log("returning the closest lower speed ratio : " + speed);
+        //Debug.Log("returning the closest lower speed ratio : " + speed);
         return speedCurveApproximation[speed];
     }
 
@@ -106,7 +107,7 @@ public class PodRacerScript : MonoBehaviour {
             currentAccelFactor -= Time.deltaTime / 1f;                                              // 1 sec to loose acceleration
             currentAccelFactor = Mathf.Clamp(currentAccelFactor, 0f, 1f);
             currentSpeed *= 0.9994f;
-            currentSpeedFactor = GetRatioForSpeed(currentSpeed);                                    // get the approximated speedFactor
+            currentSpeedFactor = GetRatioForSpeed((int)(currentSpeed*10f));                                    // get the approximated speedFactor
             currentSpeedFactor = Mathf.Clamp(currentSpeedFactor, 0f, 1f);
         }
 

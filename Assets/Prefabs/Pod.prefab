@@ -186,7 +186,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1823976161970934}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.76, y: 3.78, z: -8.58}
+  m_LocalPosition: {x: -1.76, y: 2.65, z: -19.51}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4129027022782548}
@@ -334,10 +334,10 @@ Rigidbody:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1823976161970934}
   serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 3
+  m_Mass: 500
+  m_Drag: 0
   m_AngularDrag: 20
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
@@ -398,11 +398,72 @@ MonoBehaviour:
   hoverMask:
     serializedVersion: 2
     m_Bits: 4294967039
-  forwardAcceleration: 1
-  backwardAcceleration: 1000
-  turnForce: 15
-  hoverHeight: 0.5
-  hoverForce: 10
+  speedIndicator: {fileID: 0}
+  accelCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  brakeCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  speedCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 0.6286372
+      value: 25.888914
+      inSlope: 41.1826
+      outSlope: 1.1048666
+      tangentMode: 69
+    - serializedVersion: 2
+      time: 1.0002439
+      value: 26.29949
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  currentAccelFactor: 0
+  currentBrakeFactor: 0
+  currentSpeedFactor: 0
+  currentSpeed: 0
+  turnSpeed: 2
 --- !u!124 &124753698552948440
 Behaviour:
   m_ObjectHideFlags: 1
