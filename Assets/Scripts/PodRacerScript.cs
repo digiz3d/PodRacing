@@ -7,10 +7,11 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Rigidbody))]
 public class PodRacerScript : MonoBehaviour {
     public GameObject hoverPoint;
-    public LayerMask hoverMask; // so we don't Raycast to ourself
+    public LayerMask hoverMask;                                     // so we don't Raycast to ourself
     public Text speedIndicator;
 
     #region Acceleration settings
+
     public AnimationCurve accelCurve;
     public AnimationCurve brakeCurve;
     public AnimationCurve speedCurve;
@@ -24,13 +25,14 @@ public class PodRacerScript : MonoBehaviour {
     private Dictionary<int, float> speedCurveApproximation;         // key = speed in m/s , value = factor from 0f to 1f;
     private float speedCurveApproximationPrecision = 0.0000001f;    // lower =  more accurate speeds but slower loading times
     private Vector3 forwardVector;
+
     #endregion
 
     #region Turn settings
 
     public float maxTurnSpeed = 3.0f;
     public float turnSpeedFactor = 3.0f;
-    private float turnOppositeMultiplier = 6.0f; // can be used for smoothing left/right transition
+    private float turnOppositeMultiplier = 6.0f;                    // can be used for smoothing left/right transition
     private float currentTurnSpeed = 0f;
 
     #endregion
@@ -39,7 +41,7 @@ public class PodRacerScript : MonoBehaviour {
 
     // hover settings
     private float hoverHeight = 0.5f;
-    public Vector3 gravityVector = Vector3.zero;
+    private Vector3 gravityVector = Vector3.zero;
 
     #endregion
 
@@ -82,10 +84,14 @@ public class PodRacerScript : MonoBehaviour {
 
 
     private void Update () {
+        #region Input Keys
+
         forward = Input.GetKey(KeyCode.Z) || Input.GetKey(KeyCode.UpArrow);
         brake   = Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow);
         left    = Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.LeftArrow);
         right   = Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow);
+        
+        #endregion
 
         #region Acceleration control
 
@@ -131,18 +137,24 @@ public class PodRacerScript : MonoBehaviour {
     
     private void FixedUpdate()
     {
-        #region Hover Detection
-        Vector3 normalVector = Vector3.zero;
+        #region Terrain detection
 
-       
-
+        Vector3 terrainVector = Vector3.zero;
+        
         RaycastHit hit;
 
         if (Physics.Raycast(hoverPoint.transform.position, -transform.up, out hit, hoverHeight, hoverMask.value)) // if we are close enough to the ground, apply anti-gravity effect
         {
             gravityVector = Vector3.zero;
-            normalVector = hit.normal;
-            normalVector.y = 0f;
+            //terrainVector = hit.normal;
+            //terrainVector.y = 0f;
+
+            RaycastHit hitFromNormal;
+            if (Physics.Raycast(hit.point + hit.normal, Vector3.down, out hitFromNormal, Mathf.Infinity, hoverMask.value))
+            {
+                terrainVector = hitFromNormal.point - hit.point;
+            }
+
             //Debug.Log("<color=green>touched "+hit.collider.gameObject.name +"</color>");
         }
         else // if we are not close to the ground, make that part of the pod fall
@@ -159,8 +171,8 @@ public class PodRacerScript : MonoBehaviour {
         
         #endregion
 
-        Debug.Log(forwardVector + " , " + gravityVector + " , " + normalVector);
-        rb.velocity = forwardVector + gravityVector + normalVector;
+        Debug.Log(forwardVector + " , " + gravityVector + " , " + terrainVector);
+        rb.velocity = forwardVector + gravityVector + terrainVector;
 
         #region Turning
 
@@ -185,10 +197,26 @@ public class PodRacerScript : MonoBehaviour {
         RaycastHit hit;
         if (Physics.Raycast(hoverPoint.transform.position, -transform.up, out hit, hoverHeight, hoverMask.value))                // if we are close enough to the ground, draw the impact
         {
+            Gizmos.DrawSphere(hit.point, 0.02f);
             Gizmos.color = Color.yellow;
             Gizmos.DrawRay(hit.point, hit.normal);
-            Gizmos.color = Color.blue;
-            Gizmos.DrawSphere(hit.point, 0.02f);
+            Gizmos.DrawSphere(hit.point + hit.normal, 0.02f);
+            
+            RaycastHit hitFromNormal;
+            if (Physics.Raycast(hit.point + hit.normal, Vector3.down, out hitFromNormal, Mathf.Infinity, hoverMask.value))
+            {
+                Gizmos.color = Color.blue;
+
+                Gizmos.DrawSphere(hitFromNormal.point, 0.02f);
+                Gizmos.DrawRay(hit.point + hit.normal, Vector3.down*hitFromNormal.distance);
+
+
+                Gizmos.color = Color.magenta;
+                Gizmos.DrawRay(hit.point, hitFromNormal.point-hit.point);
+
+                Debug.Log(hitFromNormal.point - hit.point);
+            }
+            
         }
     }
 
