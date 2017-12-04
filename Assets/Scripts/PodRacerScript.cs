@@ -213,8 +213,6 @@ public class PodRacerScript : MonoBehaviour {
 
                 Gizmos.color = Color.magenta;
                 Gizmos.DrawRay(hit.point, hitFromNormal.point-hit.point);
-
-                Debug.Log(hitFromNormal.point - hit.point);
             }
             
         }
