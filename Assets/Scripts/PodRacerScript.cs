@@ -9,6 +9,8 @@ public class PodRacerScript : MonoBehaviour {
     public GameObject hoverPoint;
     public LayerMask hoverMask;                                     // so we don't Raycast to ourself
     public Text speedIndicator;
+    public GameObject mesh;
+    public CameraScript podCamera;
 
     #region Acceleration settings
 
@@ -30,17 +32,21 @@ public class PodRacerScript : MonoBehaviour {
 
     #region Turn settings
 
-    public float maxTurnSpeed = 3.0f;
-    public float turnSpeedFactor = 3.0f;
+    private float maxTurnSpeed = 5.0f;
+    private float turnSpeedFactor = 3.0f;
     private float turnOppositeMultiplier = 6.0f;                    // can be used for smoothing left/right transition
     private float currentTurnSpeed = 0f;
+    private float maxRotAngle = 60f;
+    private float currentAngle = 0f;
+    [Range(0,1)]
+    public float turnRatio = 0.05f;
 
     #endregion
 
     #region Hover settings
 
     // hover settings
-    private float hoverHeight = 0.5f;
+    public float hoverHeight = 10f;
     private Vector3 gravityVector = Vector3.zero;
 
     #endregion
@@ -115,20 +121,41 @@ public class PodRacerScript : MonoBehaviour {
         #endregion
 
         #region Turn control
-
+        
         if (left)
         {
             currentTurnSpeed -= (currentTurnSpeed > 0) ? Time.deltaTime * turnSpeedFactor * turnOppositeMultiplier : Time.deltaTime * turnSpeedFactor;
             currentTurnSpeed = Mathf.Clamp(currentTurnSpeed, -maxTurnSpeed, maxTurnSpeed);
+
+            // visuals
+            currentAngle = Mathf.Lerp(currentAngle, maxRotAngle, turnRatio);
+            mesh.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, currentAngle));
+
+            // camera
+            podCamera.aimPoint.transform.localPosition = Vector3.Slerp(podCamera.aimPoint.transform.localPosition, new Vector3(-2f, 0, 10f), 0.05f);
         }
         if (right)
         {
             currentTurnSpeed += (currentTurnSpeed < 0) ? Time.deltaTime * turnSpeedFactor * turnOppositeMultiplier : Time.deltaTime * turnSpeedFactor;
             currentTurnSpeed = Mathf.Clamp(currentTurnSpeed, -maxTurnSpeed, maxTurnSpeed);
+
+            // visuals
+            currentAngle = Mathf.Lerp(currentAngle, -maxRotAngle, turnRatio);
+            mesh.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, currentAngle));
+
+            // camera
+            podCamera.aimPoint.transform.localPosition = Vector3.Slerp(podCamera.aimPoint.transform.localPosition, new Vector3(2f, 0, 10f), 0.05f);
         }
         if (!left && !right)
         {
             currentTurnSpeed *= 1f-Time.deltaTime*2f;   // we gradually reduce turning speed;
+
+            // visuals
+            currentAngle = Mathf.Lerp(currentAngle, 0, turnRatio);
+            mesh.transform.localRotation = Quaternion.Euler(new Vector3(0,0,currentAngle));
+
+            // camera
+            podCamera.aimPoint.transform.localPosition = Vector3.Slerp(podCamera.aimPoint.transform.localPosition, new Vector3(0, 0, 10f), 0.05f);
         }
 
         #endregion
@@ -137,6 +164,8 @@ public class PodRacerScript : MonoBehaviour {
     
     private void FixedUpdate()
     {
+        
+
         #region Terrain detection
 
         Vector3 terrainVector = Vector3.zero;
@@ -146,9 +175,10 @@ public class PodRacerScript : MonoBehaviour {
         if (Physics.Raycast(hoverPoint.transform.position, -transform.up, out hit, hoverHeight, hoverMask.value)) // if we are close enough to the ground, apply anti-gravity effect
         {
             gravityVector = Vector3.zero;
-            //terrainVector = hit.normal;
-            //terrainVector.y = 0f;
-
+            
+            //Debug.Log("1f-(hit.distance/hoverHeight) = 1f - (" + hit.distance + " / " + hoverHeight + ")  + = " + ( 1f - (hit.distance / hoverHeight)));
+            gravityVector += new Vector3(0f, 15f*(1f-(hit.distance/hoverHeight)), 0f); // that way the pod is floating over the ground
+            
             RaycastHit hitFromNormal;
             if (Physics.Raycast(hit.point + hit.normal, Vector3.down, out hitFromNormal, Mathf.Infinity, hoverMask.value))
             {
@@ -161,19 +191,21 @@ public class PodRacerScript : MonoBehaviour {
         {
             gravityVector += Physics.gravity * Time.fixedDeltaTime;
             //Debug.Log("<color=red>didnt touch anything</color>");
+            //rb.rotation = Quaternion.Lerp(rb.rotation, rb.rotation + Quaternion.to, 0.5f);
         }
 
         #endregion
-        
+
         #region Applying forward speed
 
         forwardVector = transform.forward * speed;
-        
+
         #endregion
 
-        Debug.Log(forwardVector + " , " + gravityVector + " , " + terrainVector);
+        //Debug.Log(forwardVector + " , " + gravityVector + " , " + terrainVector);
         rb.velocity = forwardVector + gravityVector + terrainVector;
-
+        //rb.MovePosition(transform.position + forwardVector + gravityVector + terrainVector);
+        
         #region Turning
 
         rb.angularVelocity += new Vector3(0f, currentTurnSpeed, 0f);
