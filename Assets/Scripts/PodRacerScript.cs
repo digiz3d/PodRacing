@@ -62,6 +62,11 @@ public class PodRacerScript : MonoBehaviour {
 
     private Rigidbody rb;
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log("percuté : "+ collision.collider.gameObject.name);   
+    }
+
     private void Start () {
         #region Optimizations
 
@@ -103,18 +108,18 @@ public class PodRacerScript : MonoBehaviour {
 
         if (forward)
         {
-            accelFactor += Time.deltaTime / timeToFullAcceleration;                                      // timeToFullAcceleration to reach max acceleration
+            accelFactor += Time.deltaTime / timeToFullAcceleration;                             // timeToFullAcceleration to reach max acceleration
             accelFactor = Mathf.Clamp(accelFactor, 0f, 1f);
-            speedFactor += accelCurve.Evaluate(accelFactor) * Time.deltaTime / timeToFullspeed;   // timeToFullspeed to reach max speed (at max acceleration)
+            speedFactor += accelCurve.Evaluate(accelFactor) * Time.deltaTime / timeToFullspeed; // timeToFullspeed to reach max speed (at max acceleration)
             speedFactor = Mathf.Clamp(speedFactor, 0f, 1f);
             speed = speedCurve.Evaluate(speedFactor);
         }
         else
         {
-            accelFactor -= Time.deltaTime / timeToFullAcceleration;                                      // timeToFullAcceleration to loose acceleration. could be another number
+            accelFactor -= Time.deltaTime / timeToFullAcceleration;                             // timeToFullAcceleration to loose acceleration. could be another number
             accelFactor = Mathf.Clamp(accelFactor, 0f, 1f);
             speed *= 0.999f;
-            speedFactor = GetRatioForSpeed((int)(speed*10f));                                    // get the approximated speed factor
+            speedFactor = GetRatioForSpeed((int)(speed*10f));                                   // get the approximated speed factor
             speedFactor = Mathf.Clamp(speedFactor, 0f, 1f);
         }
 
