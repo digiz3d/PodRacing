@@ -21,7 +21,6 @@ GameObject:
   - component: {fileID: 4540716170231770}
   - component: {fileID: 54366180612259076}
   - component: {fileID: 114488297127180120}
-  - component: {fileID: 65079346912468034}
   - component: {fileID: 136051821068904816}
   m_Layer: 8
   m_Name: Pod
@@ -128,7 +127,7 @@ Transform:
   m_GameObject: {fileID: 1340661155391730}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0, y: 0, z: 0.134}
-  m_LocalScale: {x: 1.2, y: 1.2, z: 1.2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4540716170231770}
   m_RootOrder: 1
@@ -189,18 +188,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 80
   m_CollisionDetection: 0
---- !u!65 &65079346912468034
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1049466042945324}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Size: {x: 0.8, y: 0.2, z: 1.2}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!95 &95257354293993348
 Animator:
   serializedVersion: 3
@@ -254,24 +241,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
-  brakeCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 2
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    - serializedVersion: 2
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 0
+  timeToFullAcceleration: 1
   speedCurve:
     serializedVersion: 2
     m_Curve:
@@ -297,7 +267,24 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 0
   timeToFullspeed: 20
-  timeToFullAcceleration: 1
+  brakeCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
   turnRatio: 0.05
   hoverHeight: 0.5
 --- !u!136 &136051821068904816

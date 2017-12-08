@@ -7,7 +7,7 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Rigidbody))]
 public class PodRacerScript : MonoBehaviour {
     public GameObject hoverPoint;
-    public LayerMask hoverMask;                                     // so we don't Raycast to ourself
+    public LayerMask hoverMask;                                     // so we don't Raycast ourself or other pods
     public Text speedIndicator;
     public GameObject mesh;
     public CameraScript podCamera;
@@ -16,33 +16,44 @@ public class PodRacerScript : MonoBehaviour {
 
     public AnimationCurve accelCurve;
     public float timeToFullAcceleration = 0.1f;
+    private float accelFactor = 0f;
+
+    #endregion
+
+    #region Speed settings
 
     public AnimationCurve speedCurve;
-    public float timeToFullspeed = 20.0f;
-    
-
-    private float accelFactor = 0f;
-    
+    private float timeToFullspeed = 20.0f;
     private float speedFactor = 0f;
     private float speed = 0f;
     private Dictionary<int, float> speedCurveApproximation;         // key = speed in m/s , value = factor from 0f to 1f;
     private float speedCurveApproximationPrecision = 0.0000001f;    // lower =  more accurate speeds but slower loading times
+    
     private Vector3 forwardVector;
 
+    #endregion
+
+    #region Brake settings
+    
     public AnimationCurve brakeCurve;
     private float brakeFactor = 0f;
+
     #endregion
 
     #region Turn settings
+
+    [Range(0, 1)]
+    
 
     private float maxTurnSpeed = 5.0f;
     private float turnSpeedFactor = 3.0f;
     private float turnOppositeMultiplier = 6.0f;                    // can be used for smoothing left/right transition
     private float currentTurnSpeed = 0f;
-    private float maxRotAngle = 60f;
-    private float currentAngle = 0f;
-    [Range(0,1)]
-    public float turnRatio = 0.05f;
+
+    private float visualRotSpeed = 0.1f;
+    private float maxRotAngle = 50f;
+    private float currentRotAngle = 0f;
+    
 
     #endregion
 
@@ -67,7 +78,7 @@ public class PodRacerScript : MonoBehaviour {
 
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("percuté : "+ collision.collider.gameObject.name);   
+        Debug.Log("percuté : "+ collision.collider.gameObject.name);
     }
 
     private void Start () {
@@ -107,7 +118,7 @@ public class PodRacerScript : MonoBehaviour {
         
         #endregion
 
-        #region Acceleration control
+        #region Acceleration + Speed control
 
         if (forward)
         {
@@ -117,58 +128,77 @@ public class PodRacerScript : MonoBehaviour {
             speedFactor = Mathf.Clamp(speedFactor, 0f, 1f);
             speed = speedCurve.Evaluate(speedFactor);
         }
-        else
+        if (brake)
+        {
+            accelFactor -= Time.deltaTime / timeToFullAcceleration;
+            accelFactor = Mathf.Clamp(accelFactor, 0f, 1f);
+            speed *= 0.96f;                                                                     // this will do for now.
+            speedFactor = GetRatioForSpeed((int)(speed * 10f));                                 // get the approximated speed factor
+            speedFactor = Mathf.Clamp(speedFactor, 0f, 1f);
+        }
+        if (!forward && !brake)
         {
             accelFactor -= Time.deltaTime / timeToFullAcceleration;                             // timeToFullAcceleration to loose acceleration. could be another number
             accelFactor = Mathf.Clamp(accelFactor, 0f, 1f);
-            speed *= 0.999f;
-            speedFactor = GetRatioForSpeed((int)(speed*10f));                                   // get the approximated speed factor
+            speed *= 0.999f;                                                                    // this will do for now.
+            speedFactor = GetRatioForSpeed((int)(speed * 10f));                                 // get the approximated speed factor
             speedFactor = Mathf.Clamp(speedFactor, 0f, 1f);
         }
-
         #endregion
 
         #region Turn control
         
+        // real turning effects
+
         if (left)
         {
             currentTurnSpeed -= (currentTurnSpeed > 0) ? Time.deltaTime * turnSpeedFactor * turnOppositeMultiplier : Time.deltaTime * turnSpeedFactor;
             currentTurnSpeed = Mathf.Clamp(currentTurnSpeed, -maxTurnSpeed, maxTurnSpeed);
-
-            // visuals
-            currentAngle = Mathf.Lerp(currentAngle, maxRotAngle, turnRatio);
-            mesh.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, currentAngle));
-
-            // camera
-            podCamera.aimPoint.transform.localPosition = Vector3.Slerp(podCamera.aimPoint.transform.localPosition, new Vector3(-2f, 0, 10f), 0.05f);
         }
         if (right)
         {
             currentTurnSpeed += (currentTurnSpeed < 0) ? Time.deltaTime * turnSpeedFactor * turnOppositeMultiplier : Time.deltaTime * turnSpeedFactor;
             currentTurnSpeed = Mathf.Clamp(currentTurnSpeed, -maxTurnSpeed, maxTurnSpeed);
-
-            // visuals
-            currentAngle = Mathf.Lerp(currentAngle, -maxRotAngle, turnRatio);
-            mesh.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, currentAngle));
-
-            // camera
-            podCamera.aimPoint.transform.localPosition = Vector3.Slerp(podCamera.aimPoint.transform.localPosition, new Vector3(2f, 0, 10f), 0.05f);
         }
         if (!left && !right)
         {
             currentTurnSpeed *= 1f-Time.deltaTime*2f;   // we gradually reduce turning speed;
+        }
 
-            // visuals
-            currentAngle = Mathf.Lerp(currentAngle, 0, turnRatio);
-            mesh.transform.localRotation = Quaternion.Euler(new Vector3(0,0,currentAngle));
+        // visual turning effects
+        if (left)
+        {
+            currentRotAngle = Mathf.Lerp(currentRotAngle, maxRotAngle, visualRotSpeed);
+            mesh.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, currentRotAngle));
+        }
+        if (right)
+        {
+            currentRotAngle = Mathf.Lerp(currentRotAngle, -maxRotAngle, visualRotSpeed);
+            mesh.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, currentRotAngle));
+        }
+        if (!left && !right)
+        {
+            currentRotAngle = Mathf.Lerp(currentRotAngle, 0, visualRotSpeed);
+            mesh.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, currentRotAngle));
+        }
 
-            // camera
+        // camera turning effects
+        if (left)
+        {
+            podCamera.aimPoint.transform.localPosition = Vector3.Slerp(podCamera.aimPoint.transform.localPosition, new Vector3(-2f, 0, 10f), 0.05f);
+        }
+        if (right)
+        {
+            podCamera.aimPoint.transform.localPosition = Vector3.Slerp(podCamera.aimPoint.transform.localPosition, new Vector3(2f, 0, 10f), 0.05f);
+        }
+        if (!left && !right)
+        {
             podCamera.aimPoint.transform.localPosition = Vector3.Slerp(podCamera.aimPoint.transform.localPosition, new Vector3(0, 0, 10f), 0.05f);
         }
 
         #endregion
 
-    }
+        }
     
     private void FixedUpdate()
     {
