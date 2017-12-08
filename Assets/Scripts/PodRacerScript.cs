@@ -15,19 +15,22 @@ public class PodRacerScript : MonoBehaviour {
     #region Acceleration settings
 
     public AnimationCurve accelCurve;
-    public AnimationCurve brakeCurve;
-    public AnimationCurve speedCurve;
-    public float timeToFullspeed = 20.0f;
     public float timeToFullAcceleration = 0.1f;
 
+    public AnimationCurve speedCurve;
+    public float timeToFullspeed = 20.0f;
+    
+
     private float accelFactor = 0f;
-    private float brakeFactor = 0f;
+    
     private float speedFactor = 0f;
     private float speed = 0f;
     private Dictionary<int, float> speedCurveApproximation;         // key = speed in m/s , value = factor from 0f to 1f;
     private float speedCurveApproximationPrecision = 0.0000001f;    // lower =  more accurate speeds but slower loading times
     private Vector3 forwardVector;
 
+    public AnimationCurve brakeCurve;
+    private float brakeFactor = 0f;
     #endregion
 
     #region Turn settings
