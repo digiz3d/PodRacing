@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 06717d3f500c0bd4d921091952cfd10d
-timeCreated: 1512853234
+guid: 32871be3c85fc2f4494b26b63961bc96
+timeCreated: 1512846970
 licenseType: Free
 ModelImporter:
   serializedVersion: 22
@@ -9,8 +9,8 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: BezierCurve.001
-    4300002: final mesh
+    4300000: Sphere.001
+    6400000: //RootNode
   externalObjects:
   - first:
       type: UnityEngine:Material
@@ -46,9 +46,9 @@ ModelImporter:
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: 0.1
+    globalScale: 0.4
     meshCompression: 0
-    addColliders: 0
+    addColliders: 1
     importVisibility: 1
     importBlendShapes: 1
     importCameras: 1

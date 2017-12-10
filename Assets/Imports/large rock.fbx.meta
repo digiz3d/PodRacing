@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 06717d3f500c0bd4d921091952cfd10d
-timeCreated: 1512853234
+guid: 64953cbcb5e945040a17ec724fd8d7b4
+timeCreated: 1512846160
 licenseType: Free
 ModelImporter:
   serializedVersion: 22
@@ -9,14 +9,14 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: BezierCurve.001
-    4300002: final mesh
+    4300000: Large rock
+    6400000: //RootNode
   externalObjects:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: No Name
-    second: {fileID: 2100000, guid: 725072253ddeee3428cf525f306c361c, type: 2}
+      name: Rock color
+    second: {fileID: 2100000, guid: 6b5ab4b15a6971743907181ce48d16b5, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
@@ -46,9 +46,9 @@ ModelImporter:
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: 0.1
+    globalScale: 1
     meshCompression: 0
-    addColliders: 0
+    addColliders: 1
     importVisibility: 1
     importBlendShapes: 1
     importCameras: 1

@@ -50,7 +50,7 @@ public class PodRacerScript : MonoBehaviour {
     private float turnOppositeMultiplier = 6.0f;                    // can be used for smoothing left/right transition
     private float currentTurnSpeed = 0f;
 
-    private float visualRotSpeed = 0.1f;
+    private float visualRotSpeed = 0.02f;
     private float maxRotAngle = 50f;
     private float currentRotAngle = 0f;
     
@@ -60,7 +60,7 @@ public class PodRacerScript : MonoBehaviour {
     #region Hover settings
 
     // hover settings
-    public float hoverHeight = 10f;
+    public float hoverHeight = 0.5f;
     private Vector3 gravityVector = Vector3.zero;
 
     #endregion
@@ -76,10 +76,12 @@ public class PodRacerScript : MonoBehaviour {
 
     private Rigidbody rb;
 
+    /*
     private void OnCollisionEnter(Collision collision)
     {
         Debug.Log("percuté : "+ collision.collider.gameObject.name);
     }
+    */
 
     private void Start () {
         #region Optimizations
@@ -185,15 +187,15 @@ public class PodRacerScript : MonoBehaviour {
         // camera turning effects
         if (left)
         {
-            podCamera.aimPoint.transform.localPosition = Vector3.Slerp(podCamera.aimPoint.transform.localPosition, new Vector3(-2f, 0, 10f), 0.05f);
+            podCamera.aimPoint.transform.localPosition = Vector3.Slerp(podCamera.aimPoint.transform.localPosition, new Vector3(-2f, 0, 10f), 0.02f);
         }
         if (right)
         {
-            podCamera.aimPoint.transform.localPosition = Vector3.Slerp(podCamera.aimPoint.transform.localPosition, new Vector3(2f, 0, 10f), 0.05f);
+            podCamera.aimPoint.transform.localPosition = Vector3.Slerp(podCamera.aimPoint.transform.localPosition, new Vector3(2f, 0, 10f), 0.02f);
         }
         if (!left && !right)
         {
-            podCamera.aimPoint.transform.localPosition = Vector3.Slerp(podCamera.aimPoint.transform.localPosition, new Vector3(0, 0, 10f), 0.05f);
+            podCamera.aimPoint.transform.localPosition = Vector3.Slerp(podCamera.aimPoint.transform.localPosition, new Vector3(0, 0, 10f), 0.02f);
         }
 
         #endregion
