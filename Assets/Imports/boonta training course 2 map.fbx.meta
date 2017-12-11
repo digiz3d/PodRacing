@@ -10,7 +10,33 @@ ModelImporter:
     2300000: //RootNode
     3300000: //RootNode
     4300000: map
+    4300002: map.001
   externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Cave ceiling
+    second: {fileID: 2100000, guid: 89b5a956d52cc924baa5e0e8a37b5d9d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Ceiling
+    second: {fileID: 2100000, guid: 786ef443050c5f241ade78bdc388ce05, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Close borders
+    second: {fileID: 2100000, guid: c0dcb8d101398a947805334aa4d4808c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Floor
+    second: {fileID: 2100000, guid: d45884509a0f0ef41b947d75732b428d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Higher borders
+    second: {fileID: 2100000, guid: f5c4f7beda23fda4494a6bd915648c2d, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
