@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PodsManager : MonoBehaviour {
     public static PodsManager instance;
+    
     public List<Pod> collection;
 
     private void Awake()
@@ -15,6 +16,9 @@ public class PodsManager : MonoBehaviour {
             }
             instance = this;
             DontDestroyOnLoad(gameObject);
+
+
+        AddPodToCollection(new Pod());
     }
 
     public void AddPodToCollection(Pod pod)
