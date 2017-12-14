@@ -292,6 +292,16 @@ Prefab:
       propertyPath: objectToFocus
       value: 
       objectReference: {fileID: 564748075}
+    - target: {fileID: 114868955629721114, guid: b283e51e38cc3cb4aa25440214f5769c,
+        type: 2}
+      propertyPath: offset.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114868955629721114, guid: b283e51e38cc3cb4aa25440214f5769c,
+        type: 2}
+      propertyPath: offset.z
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b283e51e38cc3cb4aa25440214f5769c, type: 2}
   m_IsPrefabParent: 0
@@ -709,6 +719,21 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 114488297127180120, guid: 268d384040cf1664d86d0e2a8d5eceb6,
+        type: 2}
+      propertyPath: accelCurve.m_Curve.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114488297127180120, guid: 268d384040cf1664d86d0e2a8d5eceb6,
+        type: 2}
+      propertyPath: speedCurve.m_Curve.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114488297127180120, guid: 268d384040cf1664d86d0e2a8d5eceb6,
+        type: 2}
+      propertyPath: brakeCurve.m_Curve.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4540716170231770, guid: 268d384040cf1664d86d0e2a8d5eceb6, type: 2}
       propertyPath: m_LocalPosition.x
       value: -3.14
@@ -756,9 +781,59 @@ Prefab:
       propertyPath: turnRatio
       value: 0.1
       objectReference: {fileID: 0}
+    - target: {fileID: 114488297127180120, guid: 268d384040cf1664d86d0e2a8d5eceb6,
+        type: 2}
+      propertyPath: hoverMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114488297127180120, guid: 268d384040cf1664d86d0e2a8d5eceb6,
+        type: 2}
+      propertyPath: mesh
+      value: 
+      objectReference: {fileID: 319686159}
+    - target: {fileID: 114488297127180120, guid: 268d384040cf1664d86d0e2a8d5eceb6,
+        type: 2}
+      propertyPath: accelCurve.m_RotationOrder
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 114488297127180120, guid: 268d384040cf1664d86d0e2a8d5eceb6,
+        type: 2}
+      propertyPath: timeToFullAcceleration
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114488297127180120, guid: 268d384040cf1664d86d0e2a8d5eceb6,
+        type: 2}
+      propertyPath: speedCurve.m_RotationOrder
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 114488297127180120, guid: 268d384040cf1664d86d0e2a8d5eceb6,
+        type: 2}
+      propertyPath: timeToFullspeed
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 114488297127180120, guid: 268d384040cf1664d86d0e2a8d5eceb6,
+        type: 2}
+      propertyPath: brakeCurve.m_RotationOrder
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 114488297127180120, guid: 268d384040cf1664d86d0e2a8d5eceb6,
+        type: 2}
+      propertyPath: hoverPoint
+      value: 
+      objectReference: {fileID: 319686160}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 268d384040cf1664d86d0e2a8d5eceb6, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &319686159 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1340661155391730, guid: 268d384040cf1664d86d0e2a8d5eceb6,
+    type: 2}
+  m_PrefabInternal: {fileID: 319686158}
+--- !u!1 &319686160 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1647531579410990, guid: 268d384040cf1664d86d0e2a8d5eceb6,
+    type: 2}
+  m_PrefabInternal: {fileID: 319686158}
 --- !u!1 &495764230
 GameObject:
   m_ObjectHideFlags: 0
@@ -1356,12 +1431,12 @@ Prefab:
     - target: {fileID: 224031604677513586, guid: 04a641e7321fca64fb4fc6957565ea9c,
         type: 2}
       propertyPath: m_LocalPosition.x
-      value: 357.5
+      value: 138.5
       objectReference: {fileID: 0}
     - target: {fileID: 224031604677513586, guid: 04a641e7321fca64fb4fc6957565ea9c,
         type: 2}
       propertyPath: m_LocalPosition.y
-      value: 201
+      value: 78
       objectReference: {fileID: 0}
     - target: {fileID: 224031604677513586, guid: 04a641e7321fca64fb4fc6957565ea9c,
         type: 2}
