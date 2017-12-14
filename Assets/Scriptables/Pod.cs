@@ -1,6 +1,5 @@
-﻿using System;
-using UnityEngine;
-[Serializable]
+﻿using UnityEngine;
+[CreateAssetMenu(menuName = "Asset/Pod")]
 public class Pod : ScriptableObject
 {
     public float baseMaxSpeed;

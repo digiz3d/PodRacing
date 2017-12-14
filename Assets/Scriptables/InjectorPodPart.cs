@@ -1,6 +1,6 @@
-﻿using System;
+﻿using UnityEngine;
 
-[Serializable]
+[CreateAssetMenu(menuName = "Asset/Pod part/Injector")]
 public class InjectorPodPart : PodPart
 {
     public float reducedTimeToFullSpeed;

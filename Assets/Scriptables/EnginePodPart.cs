@@ -1,6 +1,6 @@
-﻿using System;
+﻿using UnityEngine;
 
-[Serializable]
+[CreateAssetMenu(menuName = "Asset/Pod part/Engine")]
 public class EnginePodPart : PodPart
 {
     public float addedMaxSpeed;
