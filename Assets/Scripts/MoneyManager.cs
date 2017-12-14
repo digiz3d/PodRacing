@@ -6,7 +6,7 @@ public class MoneyManager : MonoBehaviour {
 
     public static MoneyManager instance;
 
-    private int money = 0;
+    public int money = 0;
 
     private void Awake()
     {

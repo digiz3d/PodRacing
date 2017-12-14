@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0020c6bc9d3450e49b316949e1de3aec, type: 3}
+  m_Name: Light Pod
+  m_EditorClassIdentifier: 
+  baseMaxSpeed: 450
+  baseTimeToFullSpeed: 50
+  name: Light Pod
+  description: Fast accelerationn slow speed
+  engine: {fileID: 11400000, guid: abd00ed707b1f104687398e09190ebd1, type: 2}
+  injector: {fileID: 11400000, guid: 86c0b05d29ea6fb4d9b2a4b29b31c28e, type: 2}
