@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Name: Light Pod
   m_EditorClassIdentifier: 
   baseMaxSpeed: 125
-  baseTimeToFullSpeed: 50
+  baseTimeToFullSpeed: 7
   name: Light Pod
   description: Fast accelerationn slow speed
   engine: {fileID: 11400000, guid: abd00ed707b1f104687398e09190ebd1, type: 2}

@@ -50,7 +50,7 @@ public class MainMenuScript : MonoBehaviour {
     {
         Pod pod = podManager.collection[podManager.selectedPod];
         info.text = "Name : " + pod.name + "\nDescripton : " + pod.description;
-        stats.text = "Maximum speed : " + pod.GetMaxSpeed().ToString() + "\n Time required to full speed : " + pod.GetTimeToFullSpeed().ToString();
+        stats.text = "Maximum speed : " + ((int)(pod.GetMaxSpeed() *3.6f)).ToString() + "km/h\n Time required to full speed : " + pod.GetTimeToFullSpeed().ToString();
         engineName.text = pod.engine.name;
         injectorName.text = pod.injector.name;
 

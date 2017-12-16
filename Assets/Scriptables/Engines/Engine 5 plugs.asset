@@ -13,4 +13,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Engine w/ 5 plugs
   price: 8000
-  addedMaxSpeed: 400
+  addedMaxSpeed: 100

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Name: Heavy Pod
   m_EditorClassIdentifier: 
   baseMaxSpeed: 139
-  baseTimeToFullSpeed: 60
+  baseTimeToFullSpeed: 10
   name: Heavy Pod
   description: Slow acceleration, fast speed
   engine: {fileID: 11400000, guid: abd00ed707b1f104687398e09190ebd1, type: 2}
