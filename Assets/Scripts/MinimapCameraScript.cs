@@ -6,6 +6,6 @@ public class MinimapCameraScript : MonoBehaviour {
     public Transform playerPodTransform;
 	// Update is called once per frame
 	void LateUpdate () {
-        transform.position = playerPodTransform.position + new Vector3(0f, 2f, 0f);
+        transform.position = playerPodTransform.position + new Vector3(0f, 3f, 0f);
 	}
 }

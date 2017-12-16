@@ -11,9 +11,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0020c6bc9d3450e49b316949e1de3aec, type: 3}
   m_Name: Light Pod
   m_EditorClassIdentifier: 
-  baseMaxSpeed: 450
+  baseMaxSpeed: 125
   baseTimeToFullSpeed: 50
   name: Light Pod
   description: Fast accelerationn slow speed
   engine: {fileID: 11400000, guid: abd00ed707b1f104687398e09190ebd1, type: 2}
   injector: {fileID: 11400000, guid: 86c0b05d29ea6fb4d9b2a4b29b31c28e, type: 2}
+  prefab: {fileID: 1766070772228834, guid: 0638ca818a67f564c9332172b60c26be, type: 2}

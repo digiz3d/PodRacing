@@ -104,7 +104,7 @@ GameObject:
   - component: {fileID: 114724994520821648}
   - component: {fileID: 136140301328597060}
   m_Layer: 8
-  m_Name: Pod 2
+  m_Name: Light Pod
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -260,6 +260,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c65f040e67f1d447a3461f5e1b4bf2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  podCharacteristics: {fileID: 0}
   hoverPoint: {fileID: 1481966284813786}
   hoverMask:
     serializedVersion: 2
@@ -285,7 +286,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
-  timeToFullAcceleration: 3
   speedCurve:
     serializedVersion: 2
     m_Curve:
@@ -310,7 +310,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
-  timeToFullspeed: 40
   brakeCurve:
     serializedVersion: 2
     m_Curve:
@@ -329,7 +328,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
-  hoverHeight: 0.5
 --- !u!136 &136140301328597060
 CapsuleCollider:
   m_ObjectHideFlags: 1

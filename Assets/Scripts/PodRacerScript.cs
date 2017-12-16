@@ -6,26 +6,30 @@ using UnityEngine.UI;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PodRacerScript : MonoBehaviour {
+    public Pod podCharacteristics;                                  // that way we've got all the characteristics for a particular pod from a scriptable object
     public GameObject hoverPoint;
     public LayerMask hoverMask;                                     // so we don't Raycast ourself or other pods
     public Text speedIndicator;
     public GameObject mesh;
     public CameraScript podCamera;
 
+    private Rigidbody rb;
+
     #region Acceleration settings
 
     public AnimationCurve accelCurve;
-    public float timeToFullAcceleration = 0.1f;
+    private float timeToFullAcceleration = 0.1f;
     private float accelFactor = 0f;
 
     #endregion
 
     #region Speed settings
-
+    private float maxSpeed = 125f;                                   // m/s
     public AnimationCurve speedCurve;
-    public float timeToFullspeed = 30.0f;
+
+    private float timeToFullspeed = 40.0f;
     private float speedFactor = 0f;
-    private float speed = 0f;
+    private float speed = 0f;                                       // unity unit /s
     private Dictionary<int, float> speedCurveApproximation;         // key = speed in m/s , value = factor from 0f to 1f;
     private float speedCurveApproximationPrecision = 0.0000001f;    // lower =  more accurate speeds but slower loading times
     
@@ -42,9 +46,6 @@ public class PodRacerScript : MonoBehaviour {
 
     #region Turn settings
 
-    [Range(0, 1)]
-    
-
     private float maxTurnSpeed = 4.0f;
     private float turnSpeedFactor = 2.0f;
     private float turnOppositeMultiplier = 6.0f;                    // can be used for smoothing left/right transition
@@ -54,13 +55,12 @@ public class PodRacerScript : MonoBehaviour {
     private float maxRotAngle = 50f;
     private float currentRotAngle = 0f;
     
-
     #endregion
 
     #region Hover settings
 
     // hover settings
-    public float hoverHeight = 0.5f;
+    private float hoverHeight = 0.5f;
     private Vector3 gravityVector = Vector3.zero;
 
     #endregion
@@ -74,7 +74,7 @@ public class PodRacerScript : MonoBehaviour {
 
     #endregion
 
-    private Rigidbody rb;
+    
 
     /*
     private void OnCollisionEnter(Collision collision)
@@ -90,7 +90,7 @@ public class PodRacerScript : MonoBehaviour {
 
         #endregion
 
-        #region Speed Approximation
+        #region Speed Approximation calculation
 
         speedCurveApproximation = new Dictionary<int, float>();
 

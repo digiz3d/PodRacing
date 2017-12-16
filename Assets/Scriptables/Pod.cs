@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+
 [CreateAssetMenu(menuName = "Asset/Pod")]
 public class Pod : ScriptableObject
 {
@@ -8,8 +9,9 @@ public class Pod : ScriptableObject
     public string description;
     public EnginePodPart engine;               // increase max speed
     public InjectorPodPart injector;           // decrease time required to max speed
+    public GameObject prefab;
 
-    public void InstallPodPart (PodPart part)
+    public void InstallPodPart(PodPart part)
     {
         EnginePodPart engine = part as EnginePodPart;
         if (engine != null)
