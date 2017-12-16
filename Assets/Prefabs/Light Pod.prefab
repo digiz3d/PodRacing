@@ -145,7 +145,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1766070772228834}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: -186.37846, y: -0.21754253, z: -605.94183}
+  m_LocalPosition: {x: -186.37846, y: -0.3, z: -605.94183}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4282885821543718}
@@ -265,7 +265,6 @@ MonoBehaviour:
   hoverMask:
     serializedVersion: 2
     m_Bits: 4294967039
-  speedIndicator: {fileID: 0}
   mesh: {fileID: 1005836613057350}
   podCamera: {fileID: 0}
   accelCurve:
@@ -337,7 +336,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.3
+  m_Radius: 0.26
   m_Height: 1
   m_Direction: 2
   m_Center: {x: 0, y: 0.11, z: 0}

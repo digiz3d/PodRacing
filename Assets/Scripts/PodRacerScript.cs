@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PodRacerScript : MonoBehaviour {
     public Pod podCharacteristics;                                  // that way we've got all the characteristics for a particular pod from a scriptable object
-
     public GameObject hoverPoint;
     public LayerMask hoverMask;                                     // so we don't Raycast ourself or other pods
-    public Text speedIndicator;
     public GameObject mesh;
     public CameraScript podCamera;
 
@@ -26,8 +21,8 @@ public class PodRacerScript : MonoBehaviour {
 
     #region Speed settings
 
-    private float maxSpeed;                                    // meters/second
-    private float timeToFullspeed;                             // second
+    private float maxSpeed;                                         // meters/second
+    private float timeToFullspeed;                                  // second
     public AnimationCurve speedCurve;
 
     
@@ -49,7 +44,7 @@ public class PodRacerScript : MonoBehaviour {
 
     #region Turn settings
 
-    private float maxTurnSpeed = 4.0f;
+    private float maxTurnSpeed = 2.0f;
     private float turnSpeedFactor = 2.0f;
     private float turnOppositeMultiplier = 6.0f;                    // can be used for smoothing left/right transition
     private float currentTurnSpeed = 0f;
@@ -143,16 +138,16 @@ public class PodRacerScript : MonoBehaviour {
         {
             accelFactor -= Time.deltaTime / timeToFullAcceleration;
             accelFactor = Mathf.Clamp01(accelFactor);
-            speed *= 0.96f;                                                                     // this will do for now.
-            speedFactor = GetRatioForSpeed((int)(speed * 10f));                                 // get the approximated speed factor
+            speed -= speed * 0.96f * Time.deltaTime;                                                                     // this will do for now.
+            speedFactor = GetRatioForSpeed((int)(speed));                                 // get the approximated speed factor
             speedFactor = Mathf.Clamp01(speedFactor);
         }
         if (!forward && !brake)
         {
             accelFactor -= Time.deltaTime / timeToFullAcceleration;                             // timeToFullAcceleration to loose acceleration. could be another number
             accelFactor = Mathf.Clamp01(accelFactor);
-            speed *= 0.999f;                                                                    // this will do for now.
-            speedFactor = GetRatioForSpeed((int)(speed * 10f));                                 // get the approximated speed factor
+            speed -= speed * 0.999f * Time.deltaTime;                                                                    // this will do for now.
+            speedFactor = GetRatioForSpeed((int)(speed));                                 // get the approximated speed factor
             speedFactor = Mathf.Clamp01(speedFactor);
         }
         #endregion
@@ -260,14 +255,6 @@ public class PodRacerScript : MonoBehaviour {
         rb.angularVelocity += new Vector3(0f, currentTurnSpeed, 0f);
 
         #endregion
-    }
-    
-    // Using this to update UI
-    private void LateUpdate()
-    {
-        Vector3 speedS = rb.velocity;
-        speedS.y = 0;
-        speedIndicator.text = (int)(speedS.magnitude * 10f * 3.6f) + " km/h";
     }
 
     private void OnDrawGizmos()
