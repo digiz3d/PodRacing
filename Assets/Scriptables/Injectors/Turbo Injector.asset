@@ -13,4 +13,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Turbo Injector
   price: 3000
-  reducedTimeToFullSpeed: -10
+  reducedTimeToFullSpeed: -1

@@ -13,4 +13,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Nitro Injector
   price: 6000
-  reducedTimeToFullSpeed: -20
+  reducedTimeToFullSpeed: -2
