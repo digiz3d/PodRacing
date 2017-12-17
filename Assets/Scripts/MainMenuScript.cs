@@ -10,8 +10,8 @@ public class MainMenuScript : MonoBehaviour {
 
     // Use this for initialization
     private void Start () {
-        menuShop.gameObject.SetActive(false);
-	}
+        DisplayPodSelection();
+    }
     
     public void Play()
     {

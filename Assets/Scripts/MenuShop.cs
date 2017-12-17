@@ -14,21 +14,18 @@ public class MenuShop : MonoBehaviour {
     private MoneyManager moneyManager;
     private PodManager podManager;
 
-    public void Start()
+    public void Awake()
     {
-        // get managers
         mainMenuScript = transform.parent.gameObject.GetComponent<MainMenuScript>();
         moneyManager = mainMenuScript.moneyManager;
         podManager = mainMenuScript.podManager;
-
-        // bind functions to buttons
-        goBackButton.onClick.AddListener(GoBack);
-
-        // display proper infos
-        Refresh();
     }
 
-    
+    public void Start()
+    {
+        // bind functions to buttons
+        goBackButton.onClick.AddListener(GoBack);
+    }
 
     private void GoBack()
     {
@@ -75,11 +72,16 @@ public class MenuShop : MonoBehaviour {
             
             if (part.price > moneyManager.money)
             {
-                item.GetComponent<Image>().color = Color.red;
+                item.transform.GetChild(2).GetComponent<Button>().enabled = false;
+                item.transform.GetChild(2).GetChild(0).GetComponent<Text>().color = Color.red;
+                item.transform.GetChild(2).GetChild(0).GetComponent<Text>().text = part.price +" Truguts";
+                item.transform.GetChild(1).GetComponent<Image>().color = Color.red;
             }
             if (podManager.collection[podManager.selectedPod].injector.name == part.name || podManager.collection[podManager.selectedPod].engine.name == part.name)
             {
-                item.GetComponent<Image>().color = Color.yellow;
+                item.transform.GetChild(2).GetComponent<Button>().enabled = false;
+                item.transform.GetChild(2).GetChild(0).GetComponent<Text>().text = "Installed";
+                item.transform.GetChild(1).GetComponent<Image>().color = Color.yellow;
             }
         }
     }

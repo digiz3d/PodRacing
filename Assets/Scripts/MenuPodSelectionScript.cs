@@ -17,24 +17,24 @@ public class MenuPodSelectionScript : MonoBehaviour {
     private MoneyManager moneyManager;
     private MainMenuScript mainMenuScript;
 
+    public void Awake()
+    {
+        mainMenuScript = transform.parent.gameObject.GetComponent<MainMenuScript>();
+        moneyManager = mainMenuScript.moneyManager;
+        podManager = mainMenuScript.podManager;
+    }
+
     private void Start()
     {
-        // get managers
-        mainMenuScript = transform.parent.gameObject.GetComponent<MainMenuScript>();
-        podManager = mainMenuScript.podManager;
-        moneyManager = mainMenuScript.moneyManager;
-
         // bind functions to buttons
         nextButton.onClick.AddListener(NextPod);
         previousButton.onClick.AddListener(PreviousPod);
         shopButton.onClick.AddListener(GoToShop);
         goButton.onClick.AddListener(Play);
 
-        // display proper infos
         Refresh();
     }
 
-    
 
     public void PreviousPod()
     {
@@ -99,7 +99,6 @@ public class MenuPodSelectionScript : MonoBehaviour {
         stats.text = "Maximum speed : " + ((int)(pod.GetMaxSpeed() * 3.6f)).ToString() + "km/h\n Time required to full speed : " + pod.GetTimeToFullSpeed().ToString();
         engineName.text = pod.engine.name;
         injectorName.text = pod.injector.name;
-
         previousButton.gameObject.SetActive(PreviousPodExists());
         nextButton.gameObject.SetActive(NextPodExists());
     }
