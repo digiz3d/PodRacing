@@ -12,16 +12,27 @@ public class MainMenuScript : MonoBehaviour {
     private void Start () {
         menuShop.gameObject.SetActive(false);
 	}
-
     
     public void Play()
     {
+        Debug.Log("loading.");
+        DisableAll();
         levelManager.LoadTheOnlyMap();
     }
 
     public void DisplayShop()
     {
-        menuPodSelection.gameObject.SetActive(false);
+        DisableAll();
         menuShop.gameObject.SetActive(true);
+    }
+    public void DisplayPodSelection()
+    {
+        DisableAll();
+        menuPodSelection.gameObject.SetActive(true);
+    }
+    private void DisableAll()
+    {
+        menuPodSelection.gameObject.SetActive(false);
+        menuShop.gameObject.SetActive(false);
     }
 }

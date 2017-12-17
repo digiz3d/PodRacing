@@ -19,7 +19,6 @@ public class MenuPodSelectionScript : MonoBehaviour {
     
     private void Start()
     {
-        goButton.enabled = false;
         mainMenuScript = transform.parent.gameObject.GetComponent<MainMenuScript>();
         podManager = mainMenuScript.podManager;
         moneyManager = mainMenuScript.moneyManager;
