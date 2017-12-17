@@ -872,7 +872,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Title - money
+  m_Text: Shop - money
 --- !u!114 &114286858058416512
 MonoBehaviour:
   m_ObjectHideFlags: 1
