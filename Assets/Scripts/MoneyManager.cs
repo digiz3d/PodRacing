@@ -17,7 +17,7 @@ public class MoneyManager : MonoBehaviour {
         }
         instance = this;
         DontDestroyOnLoad(gameObject);
-        money = PlayerPrefs.GetInt("money");
+        //money = PlayerPrefs.GetInt("money");
     }
 
     public void AddMoney(int quantity)
@@ -37,6 +37,6 @@ public class MoneyManager : MonoBehaviour {
 
     private void OnDestroy()
     {
-        PlayerPrefs.SetInt("money", money);
+        //PlayerPrefs.SetInt("money", money);
     }
 }

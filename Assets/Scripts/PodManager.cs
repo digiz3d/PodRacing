@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class PodManager : MonoBehaviour {
     public static PodManager instance;
-    
+
     public List<Pod> collection;
     public int selectedPod;
 
@@ -17,7 +17,7 @@ public class PodManager : MonoBehaviour {
         instance = this;
         DontDestroyOnLoad(gameObject);
     }
-
+    
     public void AddPodToCollection(Pod pod)
     {
         if (!collection.Contains(pod))

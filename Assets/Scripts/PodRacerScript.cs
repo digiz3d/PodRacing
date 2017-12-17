@@ -37,8 +37,8 @@ public class PodRacerScript : MonoBehaviour {
 
     #region Brake settings
     
-    public AnimationCurve brakeCurve;
-    private float brakeFactor = 0f;
+    //public AnimationCurve brakeCurve;
+    //private float brakeFactor = 0f;
 
     #endregion
 

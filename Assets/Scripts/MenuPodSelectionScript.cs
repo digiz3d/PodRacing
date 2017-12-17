@@ -16,20 +16,25 @@ public class MenuPodSelectionScript : MonoBehaviour {
     private PodManager podManager;
     private MoneyManager moneyManager;
     private MainMenuScript mainMenuScript;
-    
+
     private void Start()
     {
+        // get managers
         mainMenuScript = transform.parent.gameObject.GetComponent<MainMenuScript>();
         podManager = mainMenuScript.podManager;
         moneyManager = mainMenuScript.moneyManager;
 
+        // bind functions to buttons
         nextButton.onClick.AddListener(NextPod);
         previousButton.onClick.AddListener(PreviousPod);
         shopButton.onClick.AddListener(GoToShop);
         goButton.onClick.AddListener(Play);
-        DisplaySelectedPod();
-        money.text = moneyManager.money+" Truguts";
+
+        // display proper infos
+        Refresh();
     }
+
+    
 
     public void PreviousPod()
     {
@@ -39,7 +44,7 @@ public class MenuPodSelectionScript : MonoBehaviour {
             return;
         }
         podManager.selectedPod--;
-        DisplaySelectedPod();
+        RefreshSelectedPod();
     }
 
     public void NextPod()
@@ -50,20 +55,10 @@ public class MenuPodSelectionScript : MonoBehaviour {
             return;
         }
         podManager.selectedPod++;
-        DisplaySelectedPod();
+        RefreshSelectedPod();
     }
 
-    private void DisplaySelectedPod()
-    {
-        Pod pod = podManager.collection[podManager.selectedPod];
-        info.text = "Name : " + pod.name + "\nDescripton : " + pod.description;
-        stats.text = "Maximum speed : " + ((int)(pod.GetMaxSpeed() * 3.6f)).ToString() + "km/h\n Time required to full speed : " + pod.GetTimeToFullSpeed().ToString();
-        engineName.text = pod.engine.name;
-        injectorName.text = pod.injector.name;
-
-        previousButton.gameObject.SetActive(PreviousPodExists());
-        nextButton.gameObject.SetActive(NextPodExists());
-    }
+    
 
     private bool PreviousPodExists()
     {
@@ -84,4 +79,30 @@ public class MenuPodSelectionScript : MonoBehaviour {
     {
         mainMenuScript.DisplayShop();
     }
+
+
+    #region Refreshes
+
+    public void Refresh()
+    {
+        RefreshSelectedPod();
+        RefreshMoney();
+    }
+    private void RefreshMoney()
+    {
+        money.text = moneyManager.money + " Truguts";
+    }
+    private void RefreshSelectedPod()
+    {
+        Pod pod = podManager.collection[podManager.selectedPod];
+        info.text = "Name : " + pod.name + "\nDescripton : " + pod.description;
+        stats.text = "Maximum speed : " + ((int)(pod.GetMaxSpeed() * 3.6f)).ToString() + "km/h\n Time required to full speed : " + pod.GetTimeToFullSpeed().ToString();
+        engineName.text = pod.engine.name;
+        injectorName.text = pod.injector.name;
+
+        previousButton.gameObject.SetActive(PreviousPodExists());
+        nextButton.gameObject.SetActive(NextPodExists());
+    }
+
+    #endregion
 }
