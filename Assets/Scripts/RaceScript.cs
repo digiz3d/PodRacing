@@ -2,8 +2,20 @@
 using UnityEngine;
 
 public class RaceScript : MonoBehaviour {
-    public Transform spawn;
+    public static RaceScript instance;
+
+    private void Awake()
+    {
+        if (instance != null)
+        {
+            Debug.LogWarning("Multiple RaceScript scripts !!");
+            return;
+        }
+        instance = this;
+    }
+
     public int laps = 1;
+    public Transform spawn;
     public CameraScript cameraScript;
     public UIPodSpeedScript uiPodScript;
     public MinimapCameraScript minimapScript;
@@ -12,9 +24,9 @@ public class RaceScript : MonoBehaviour {
     private GameObject playerPod;
     private PodRacerScript podRacerScript;
 
-    public int currentLap = 0;
-    public int checkedpoints = 0;
     public CheckpointScript[] checkpoints;
+
+    private PodRacerScript winner;
 
     // Use this for initialization
     private void Start () {
@@ -36,9 +48,17 @@ public class RaceScript : MonoBehaviour {
         minimapScript.playerPodTransform = playerPod.transform;
     }
 
-    public void PassFinishLine()
+    public void PassFinishLine(PodRacerScript podRacerScript)
     {
-        currentLap++;
+        if (podRacerScript.GetCheckpointsNumber() == checkpoints.Length) {
+            if (podRacerScript.GetCurrentLap()+1 == laps)
+            {
+                winner = podRacerScript;
+                return;
+            }
+            podRacerScript.NextLap();
+            podRacerScript.ResetCheckpoints();
+        }
     }
 
     private IEnumerator RaceLoop()
@@ -59,13 +79,15 @@ public class RaceScript : MonoBehaviour {
     {
         podRacerScript.EnableControls();
 
-        while (currentLap != laps+1 && checkedpoints != checkpoints.Length) {
+        while (winner == null) {
             yield return null;
         }
     }
 
     private IEnumerator RaceEnding()
     {
+        Debug.Log("gg "+podRacerScript.name);
         yield return new WaitForSecondsRealtime(5f);
+        LevelManager.instance.GoBackToMainMenu();
     }
 }

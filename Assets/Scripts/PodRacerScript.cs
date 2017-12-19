@@ -14,6 +14,7 @@ public class PodRacerScript : MonoBehaviour {
     private bool affectedByPhysics = false;
     private Rigidbody rb;
     private List<CheckpointScript> passedCheckpoints;
+    private int currentLap;
 
     #region Acceleration settings
 
@@ -292,7 +293,6 @@ public class PodRacerScript : MonoBehaviour {
                 Gizmos.color = Color.magenta;
                 Gizmos.DrawRay(hit.point, hitFromNormal.point-hit.point);
             }
-            
         }
     }
 
@@ -323,11 +323,15 @@ public class PodRacerScript : MonoBehaviour {
     #endregion
 
     #region Public methods
-
+    public void SetPod(Pod pod)
+    {
+        podCharacteristics = pod;
+    }
     public void SetPodCamera(CameraScript cam)
     {
         podCamera = cam;
     }
+
     public void EnableControls()
     {
         controllable = true;
@@ -338,17 +342,34 @@ public class PodRacerScript : MonoBehaviour {
         controllable = false;
         affectedByPhysics = false;
     }
+
     public void PassCheckpoint(CheckpointScript checkpoint)
     {
-        passedCheckpoints.Add(checkpoint);
+        if (!passedCheckpoints.Contains(checkpoint))
+        {
+            passedCheckpoints.Add(checkpoint);
+        }
     }
     public void ResetCheckpoints()
     {
         passedCheckpoints.Clear();
     }
-    public void SetPod(Pod pod)
+    public int GetCheckpointsNumber()
     {
-        podCharacteristics = pod;
+        return passedCheckpoints.Count;
+    }
+
+    public void PassFinishLine()
+    {
+        RaceScript.instance.PassFinishLine(this);
+    }
+    public void NextLap()
+    {
+        currentLap++;
+    }
+    public int GetCurrentLap()
+    {
+        return currentLap;
     }
     #endregion
 }
