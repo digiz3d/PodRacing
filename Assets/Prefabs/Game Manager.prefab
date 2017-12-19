@@ -53,7 +53,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e0678344f1f8e6428f89acf98d32ba9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  money: 0
+  money: 12000
 --- !u!114 &114909541497363564
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -65,7 +65,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b8033321c682874f92c3041eae34b1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collection:
+  collection: []
+  defaultPods:
   - {fileID: 11400000, guid: afd96716f7ed5834c9479987a4e86794, type: 2}
   - {fileID: 11400000, guid: 104c4eeb926ed6044a28ce9282c036fb, type: 2}
   selectedPod: 0

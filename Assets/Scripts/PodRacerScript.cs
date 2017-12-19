@@ -3,13 +3,17 @@ using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PodRacerScript : MonoBehaviour {
-    public Pod podCharacteristics;                                  // that way we've got all the characteristics for a particular pod from a scriptable object
+    
     public GameObject hoverPoint;
     public LayerMask hoverMask;                                     // so we don't Raycast ourself or other pods
     public GameObject mesh;
-    public CameraScript podCamera;
 
+    private CameraScript podCamera;
+    private bool controllable = true;
+    private Pod podCharacteristics;                                 // that way we've got all the characteristics for a particular pod from a scriptable object
+    private bool affectedByPhysics = false;
     private Rigidbody rb;
+    private List<CheckpointScript> passedCheckpoints;
 
     #region Acceleration settings
 
@@ -24,7 +28,6 @@ public class PodRacerScript : MonoBehaviour {
     private float maxSpeed;                                         // meters/second
     private float timeToFullspeed;                                  // second
     public AnimationCurve speedCurve;
-
     
     private float speedFactor = 0f;
     private float speed = 0f;                                       // unit/second
@@ -85,7 +88,7 @@ public class PodRacerScript : MonoBehaviour {
         #region Optimizations
 
         rb = GetComponent<Rigidbody>();
-
+        passedCheckpoints = new List<CheckpointScript>();
         #endregion
 
         #region Fetching infos from pod characteristics
@@ -116,12 +119,13 @@ public class PodRacerScript : MonoBehaviour {
 
     private void Update () {
         #region Input Keys
-
-        forward = Input.GetKey(KeyCode.Z) || Input.GetKey(KeyCode.UpArrow);
-        brake   = Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow);
-        left    = Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.LeftArrow);
-        right   = Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow);
-
+        if (controllable)
+        {
+            forward = Input.GetKey(KeyCode.Z) || Input.GetKey(KeyCode.UpArrow);
+            brake = Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow);
+            left = Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.LeftArrow);
+            right = Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow);
+        }
         #endregion
 
         #region Acceleration + Speed control
@@ -189,17 +193,20 @@ public class PodRacerScript : MonoBehaviour {
         }
 
         // camera turning effects
-        if (left)
+        if (podCamera != null)
         {
-            podCamera.aimPoint.transform.localPosition = Vector3.Slerp(podCamera.aimPoint.transform.localPosition, new Vector3(-2f, 0, 10f), 0.02f);
-        }
-        if (right)
-        {
-            podCamera.aimPoint.transform.localPosition = Vector3.Slerp(podCamera.aimPoint.transform.localPosition, new Vector3(2f, 0, 10f), 0.02f);
-        }
-        if (!left && !right)
-        {
-            podCamera.aimPoint.transform.localPosition = Vector3.Slerp(podCamera.aimPoint.transform.localPosition, new Vector3(0, 0, 10f), 0.02f);
+            if (left)
+            {
+                podCamera.aimPoint.transform.localPosition = Vector3.Slerp(podCamera.aimPoint.transform.localPosition, new Vector3(-2f, 0, 10f), 0.02f);
+            }
+            if (right)
+            {
+                podCamera.aimPoint.transform.localPosition = Vector3.Slerp(podCamera.aimPoint.transform.localPosition, new Vector3(2f, 0, 10f), 0.02f);
+            }
+            if (!left && !right)
+            {
+                podCamera.aimPoint.transform.localPosition = Vector3.Slerp(podCamera.aimPoint.transform.localPosition, new Vector3(0, 0, 10f), 0.02f);
+            }
         }
 
         #endregion
@@ -208,36 +215,39 @@ public class PodRacerScript : MonoBehaviour {
     
     private void FixedUpdate()
     {
-        
-
         #region Terrain detection
 
         Vector3 terrainVector = Vector3.zero;
-        
-        RaycastHit hit;
 
-        if (Physics.Raycast(hoverPoint.transform.position, -transform.up, out hit, hoverHeight, hoverMask.value)) // if we are close enough to the ground, apply anti-gravity effect
+        if (affectedByPhysics)
         {
-            gravityVector = Vector3.zero;
-            
-            //Debug.Log("1f-(hit.distance/hoverHeight) = 1f - (" + hit.distance + " / " + hoverHeight + ")  + = " + ( 1f - (hit.distance / hoverHeight)));
-            gravityVector += new Vector3(0f, 15f*(1f-(hit.distance/hoverHeight)), 0f); // that way the pod is floating over the ground
-            
-            RaycastHit hitFromNormal;
-            if (Physics.Raycast(hit.point + hit.normal, Vector3.down, out hitFromNormal, Mathf.Infinity, hoverMask.value))
+            RaycastHit hit;
+
+            if (Physics.Raycast(hoverPoint.transform.position, -transform.up, out hit, hoverHeight, hoverMask.value)) // if we are close enough to the ground, apply anti-gravity effect
             {
-                terrainVector = hitFromNormal.point - hit.point;
+                gravityVector = Vector3.zero;
+
+                //Debug.Log("1f-(hit.distance/hoverHeight) = 1f - (" + hit.distance + " / " + hoverHeight + ")  + = " + ( 1f - (hit.distance / hoverHeight)));
+                gravityVector += new Vector3(0f, 15f * (1f - (hit.distance / hoverHeight)), 0f); // that way the pod is floating over the ground
+
+
+                RaycastHit hitFromNormal;
+                if (Physics.Raycast(hit.point + hit.normal, Vector3.down, out hitFromNormal, Mathf.Infinity, hoverMask.value))
+                {
+                    terrainVector = hitFromNormal.point - hit.point;
+                }
+
+
+                //Debug.Log("<color=green>touched "+hit.collider.gameObject.name +"</color>");
+            }
+            else // if we are not close to the ground, make that part of the pod fall
+            {
+                gravityVector += Physics.gravity * Time.fixedDeltaTime;
+                //Debug.Log("<color=red>didnt touch anything</color>");
+                //rb.rotation = Quaternion.Lerp(rb.rotation, rb.rotation + Quaternion.to, 0.5f);
             }
 
-            //Debug.Log("<color=green>touched "+hit.collider.gameObject.name +"</color>");
         }
-        else // if we are not close to the ground, make that part of the pod fall
-        {
-            gravityVector += Physics.gravity * Time.fixedDeltaTime;
-            //Debug.Log("<color=red>didnt touch anything</color>");
-            //rb.rotation = Quaternion.Lerp(rb.rotation, rb.rotation + Quaternion.to, 0.5f);
-        }
-
         #endregion
 
         #region Applying forward speed
@@ -310,5 +320,35 @@ public class PodRacerScript : MonoBehaviour {
         return speedCurveApproximation[speed];
     }
 
+    #endregion
+
+    #region Public methods
+
+    public void SetPodCamera(CameraScript cam)
+    {
+        podCamera = cam;
+    }
+    public void EnableControls()
+    {
+        controllable = true;
+        affectedByPhysics = true;
+    }
+    public void DisableControls()
+    {
+        controllable = false;
+        affectedByPhysics = false;
+    }
+    public void PassCheckpoint(CheckpointScript checkpoint)
+    {
+        passedCheckpoints.Add(checkpoint);
+    }
+    public void ResetCheckpoints()
+    {
+        passedCheckpoints.Clear();
+    }
+    public void SetPod(Pod pod)
+    {
+        podCharacteristics = pod;
+    }
     #endregion
 }

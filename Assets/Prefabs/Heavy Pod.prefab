@@ -229,13 +229,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c65f040e67f1d447a3461f5e1b4bf2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  podCharacteristics: {fileID: 11400000, guid: 104c4eeb926ed6044a28ce9282c036fb, type: 2}
+  podCharacteristics: {fileID: 0}
   hoverPoint: {fileID: 1647531579410990}
   hoverMask:
     serializedVersion: 2
     m_Bits: 4294967039
   mesh: {fileID: 1340661155391730}
   podCamera: {fileID: 0}
+  controllable: 0
   accelCurve:
     serializedVersion: 2
     m_Curve:
@@ -268,24 +269,6 @@ MonoBehaviour:
       value: 0.5789195
       inSlope: 1.2295942
       outSlope: 1.2295942
-      tangentMode: 0
-    - serializedVersion: 2
-      time: 1
-      value: 1
-      inSlope: 1
-      outSlope: 1
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 0
-  brakeCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 2
-      time: 0
-      value: 0
-      inSlope: 1
-      outSlope: 1
       tangentMode: 0
     - serializedVersion: 2
       time: 1

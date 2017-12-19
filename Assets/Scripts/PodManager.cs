@@ -25,24 +25,19 @@ public class PodManager : MonoBehaviour {
         }
     }
 
-    // that way, we don't override values on the scriptable object from the editor. We can still change it in-game.
+    // that way, we don't override values on the scriptable object from the editor. We can still change it in-game, by buying new parts.
     public void AddPodToCollection(Pod pod)
     {
-        // okay this is the proper way xD
         Pod podToAdd = Object.Instantiate(pod);
-        /*
-        Pod podToAdd = ScriptableObject.CreateInstance<Pod>();
-        podToAdd.baseMaxSpeed = pod.baseMaxSpeed;
-        podToAdd.baseTimeToFullSpeed = pod.baseTimeToFullSpeed;
-        podToAdd.name = pod.name;
-        podToAdd.description = pod.description;
-        podToAdd.engine = pod.engine;
-        podToAdd.injector = pod.injector;
-        podToAdd.prefab = pod.prefab;
-        */
+
         if (!collection.Contains(pod))
         {
             collection.Add(podToAdd);
         }
+    }
+
+    public Pod GetSelectedPod()
+    {
+        return collection[selectedPod];
     }
 }
