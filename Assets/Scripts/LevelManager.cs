@@ -8,13 +8,16 @@ public class LevelManager : MonoBehaviour {
 
     private void Awake()
     {
-        if (instance != null)
+        if (instance == null)
         {
-            Debug.LogWarning("Multiple MoneyManager scripts !!");
-            return;
+            instance = this;
+            DontDestroyOnLoad(gameObject);
         }
-        instance = this;
-        DontDestroyOnLoad(gameObject);
+        else
+        {
+            Debug.LogWarning("Multiple LevelManager scripts !!");
+            DestroyImmediate(gameObject);
+        }
     }
 
     public void LoadTheOnlyMap()

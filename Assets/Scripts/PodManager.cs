@@ -12,18 +12,22 @@ public class PodManager : MonoBehaviour {
 
     private void Awake()
     {
-        if (instance != null)
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+            foreach (Pod pod in defaultPods)
+            {
+                AddPodToCollection(pod);
+            }
+        }
+        else
         {
             Debug.LogWarning("Multiple PodManager scripts !!");
-            return;
-        }
-        instance = this;
-        DontDestroyOnLoad(gameObject);
-        foreach (Pod pod in defaultPods)
-        {
-            AddPodToCollection(pod);
+            DestroyImmediate(gameObject);
         }
     }
+
 
     // that way, we don't override values on the scriptable object from the editor. We can still change it in-game, by buying new parts.
     public void AddPodToCollection(Pod pod)

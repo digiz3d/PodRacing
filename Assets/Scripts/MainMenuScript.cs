@@ -4,10 +4,6 @@ public class MainMenuScript : MonoBehaviour {
     public MenuPodSelectionScript menuPodSelection;
     public MenuShop menuShop;
 
-    public MoneyManager moneyManager;
-    public PodManager podManager;
-    public LevelManager levelManager;
-
     // Use this for initialization
     private void Start () {
         DisplayPodSelection();
@@ -16,7 +12,7 @@ public class MainMenuScript : MonoBehaviour {
     public void Play()
     {
         DisableAll();
-        levelManager.LoadTheOnlyMap();
+        LevelManager.instance.LoadTheOnlyMap();
     }
 
     public void DisplayShop()

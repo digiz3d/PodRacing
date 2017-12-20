@@ -13,19 +13,12 @@ public class MenuPodSelectionScript : MonoBehaviour {
     public Button shopButton;
     public Button goButton;
 
-    private PodManager podManager;
-    private MoneyManager moneyManager;
     private MainMenuScript mainMenuScript;
-
-    public void Awake()
-    {
-        mainMenuScript = transform.parent.gameObject.GetComponent<MainMenuScript>();
-        moneyManager = mainMenuScript.moneyManager;
-        podManager = mainMenuScript.podManager;
-    }
-
+    
     private void Start()
     {
+        mainMenuScript = transform.parent.gameObject.GetComponent<MainMenuScript>();
+
         // bind functions to buttons
         nextButton.onClick.AddListener(NextPod);
         previousButton.onClick.AddListener(PreviousPod);
@@ -43,7 +36,7 @@ public class MenuPodSelectionScript : MonoBehaviour {
             Debug.Log("no previous pod");
             return;
         }
-        podManager.selectedPod--;
+        PodManager.instance.selectedPod--;
         RefreshSelectedPod();
     }
 
@@ -54,7 +47,7 @@ public class MenuPodSelectionScript : MonoBehaviour {
             Debug.Log("no next pod");
             return;
         }
-        podManager.selectedPod++;
+        PodManager.instance.selectedPod++;
         RefreshSelectedPod();
     }
 
@@ -62,12 +55,12 @@ public class MenuPodSelectionScript : MonoBehaviour {
 
     private bool PreviousPodExists()
     {
-        return podManager.selectedPod - 1 >= 0;
+        return PodManager.instance.selectedPod - 1 >= 0;
     }
 
     private bool NextPodExists()
     {
-        return podManager.selectedPod + 1 < podManager.collection.Count;
+        return PodManager.instance.selectedPod + 1 < PodManager.instance.collection.Count;
     }
 
     public void Play()
@@ -90,11 +83,11 @@ public class MenuPodSelectionScript : MonoBehaviour {
     }
     private void RefreshMoney()
     {
-        money.text = moneyManager.money + " Truguts";
+        money.text = MoneyManager.instance.money + " Truguts";
     }
     private void RefreshSelectedPod()
     {
-        Pod pod = podManager.collection[podManager.selectedPod];
+        Pod pod = PodManager.instance.collection[PodManager.instance.selectedPod];
         info.text = "Name : " + pod.name + "\nDescripton : " + pod.description;
         stats.text = "Maximum speed : " + ((int)(pod.GetMaxSpeed() * 3.6f)).ToString() + "km/h\n Time required to full speed : " + pod.GetTimeToFullSpeed().ToString();
         engineName.text = pod.engine.name;

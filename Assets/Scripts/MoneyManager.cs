@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class MoneyManager : MonoBehaviour {
 
@@ -10,14 +8,16 @@ public class MoneyManager : MonoBehaviour {
 
     private void Awake()
     {
-        if (instance != null)
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
         {
             Debug.LogWarning("Multiple MoneyManager scripts !!");
-            return;
+            DestroyImmediate(gameObject);
         }
-        instance = this;
-        DontDestroyOnLoad(gameObject);
-        //money = PlayerPrefs.GetInt("money");
     }
 
     public void AddMoney(int quantity)
@@ -33,10 +33,5 @@ public class MoneyManager : MonoBehaviour {
         }
         money -= Mathf.Abs(quantity);
         return true;
-    }
-
-    private void OnDestroy()
-    {
-        //PlayerPrefs.SetInt("money", money);
     }
 }
