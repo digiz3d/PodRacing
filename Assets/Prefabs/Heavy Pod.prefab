@@ -113,12 +113,12 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1049466042945324}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: -187.396, y: -0.3, z: -606.03}
+  m_LocalPosition: {x: -0.23228048, y: -7.153079e-17, z: 3.22146}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4839111894276612}
-  - {fileID: 4876309293438694}
   - {fileID: 4824519056614274}
+  - {fileID: 4876309293438694}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
@@ -133,7 +133,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4540716170231770}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4839111894276612
 Transform:
@@ -160,7 +160,7 @@ Transform:
   m_Children:
   - {fileID: 4294892879922400}
   m_Father: {fileID: 4540716170231770}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &23398841073885918
 MeshRenderer:
@@ -229,14 +229,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c65f040e67f1d447a3461f5e1b4bf2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  podCharacteristics: {fileID: 0}
   hoverPoint: {fileID: 1647531579410990}
   hoverMask:
     serializedVersion: 2
     m_Bits: 4294967039
   mesh: {fileID: 1340661155391730}
-  podCamera: {fileID: 0}
-  controllable: 0
   accelCurve:
     serializedVersion: 2
     m_Curve:
@@ -273,9 +270,9 @@ MonoBehaviour:
     - serializedVersion: 2
       time: 1
       value: 1
-      inSlope: 1
+      inSlope: 0.029170074
       outSlope: 1
-      tangentMode: 0
+      tangentMode: 1
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0

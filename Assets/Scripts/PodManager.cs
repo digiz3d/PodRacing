@@ -24,7 +24,7 @@ public class PodManager : MonoBehaviour {
         else
         {
             Debug.LogWarning("Multiple PodManager scripts !!");
-            DestroyImmediate(gameObject);
+            Destroy(gameObject);
         }
     }
 

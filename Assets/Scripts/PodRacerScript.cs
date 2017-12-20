@@ -39,16 +39,9 @@ public class PodRacerScript : MonoBehaviour {
 
     #endregion
 
-    #region Brake settings
-    
-    //public AnimationCurve brakeCurve;
-    //private float brakeFactor = 0f;
-
-    #endregion
-
     #region Turn settings
 
-    private float maxTurnSpeed = 2.0f;
+    private float maxTurnSpeed = 1.0f;
     private float turnSpeedFactor = 2.0f;
     private float turnOppositeMultiplier = 6.0f;                    // can be used for smoothing left/right transition
     private float currentTurnSpeed = 0f;
@@ -75,9 +68,7 @@ public class PodRacerScript : MonoBehaviour {
     private bool right;
 
     #endregion
-
     
-
     /* collisions
     private void OnCollisionEnter(Collision collision)
     {
@@ -143,16 +134,16 @@ public class PodRacerScript : MonoBehaviour {
         {
             accelFactor -= Time.deltaTime / timeToFullAcceleration;
             accelFactor = Mathf.Clamp01(accelFactor);
-            speed -= speed * 0.96f * Time.deltaTime;                                                                     // this will do for now.
-            speedFactor = GetRatioForSpeed((int)(speed));                                 // get the approximated speed factor
+            speed = Mathf.Lerp(speed, 0f, Time.deltaTime*2f);                                   // this will do for now.
+            speedFactor = GetRatioForSpeed((int)(speed));                                       // get the approximated speed factor
             speedFactor = Mathf.Clamp01(speedFactor);
         }
         if (!forward && !brake)
         {
             accelFactor -= Time.deltaTime / timeToFullAcceleration;                             // timeToFullAcceleration to loose acceleration. could be another number
             accelFactor = Mathf.Clamp01(accelFactor);
-            speed -= speed * 0.999f * Time.deltaTime;                                                                    // this will do for now.
-            speedFactor = GetRatioForSpeed((int)(speed));                                 // get the approximated speed factor
+            speed = Mathf.Lerp(speed, 0f, Time.deltaTime/4f);                                   // this will do for now.
+            speedFactor = GetRatioForSpeed((int)(speed));                                       // get the approximated speed factor
             speedFactor = Mathf.Clamp01(speedFactor);
         }
         #endregion

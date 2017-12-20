@@ -16,7 +16,7 @@ public class MoneyManager : MonoBehaviour {
         else
         {
             Debug.LogWarning("Multiple MoneyManager scripts !!");
-            DestroyImmediate(gameObject);
+            Destroy(gameObject);
         }
     }
 

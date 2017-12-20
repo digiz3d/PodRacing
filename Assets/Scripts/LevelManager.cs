@@ -16,7 +16,7 @@ public class LevelManager : MonoBehaviour {
         else
         {
             Debug.LogWarning("Multiple LevelManager scripts !!");
-            DestroyImmediate(gameObject);
+            Destroy(gameObject);
         }
     }
 

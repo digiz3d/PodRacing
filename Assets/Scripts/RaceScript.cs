@@ -37,7 +37,7 @@ public class RaceScript : MonoBehaviour {
 
     private void SpawnPod()
     {
-        playerPod = Instantiate(pod.prefab, spawn, true);
+        playerPod = Instantiate(pod.prefab, spawn.position, spawn.rotation);
         podRacerScript = playerPod.GetComponent<PodRacerScript>();
         podRacerScript.DisableControls();
         podRacerScript.SetPodCamera(cameraScript);
