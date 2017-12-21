@@ -20,15 +20,17 @@ public class RaceScript : MonoBehaviour {
     public CameraScript cameraScript;
     public UIPodSpeedScript uiPodScript;
     public MinimapCameraScript minimapScript;
-    public Text countdown;
+    public Text statusUI;
     public CheckpointScript[] checkpoints;
     public int countdownTime = 4;
+    public ParticleSystem sparksPrefab;
 
     private Pod pod;
     private GameObject playerPod;
     private PodRacerScript podRacerScript;
     private PodRacerScript winner;
     private int currentCountdown;
+    
 
     // Use this for initialization
     private void Start () {
@@ -47,7 +49,7 @@ public class RaceScript : MonoBehaviour {
         cameraScript.SetAimPoint(playerPod.transform.GetChild(1));
         cameraScript.SetObjectToFocus(playerPod);
         uiPodScript.SetPod(podRacerScript);
-        minimapScript.playerPodTransform = playerPod.transform;
+        minimapScript.Follow(playerPod.transform);
     }
 
     public void PassFinishLine(PodRacerScript podRacerScript)
@@ -78,26 +80,23 @@ public class RaceScript : MonoBehaviour {
     {
         yield return new WaitForSecondsRealtime(5f);
     }
-
     private IEnumerator DisplayCountDown()
     {
         currentCountdown = countdownTime;
         while(currentCountdown > 0)
         {
-            Debug.Log("ah");
             yield return new WaitForSecondsRealtime(1f);
             currentCountdown--;
-            countdown.text = currentCountdown + "";
-            Debug.Log("bh");
+            statusUI.text = currentCountdown + "";
         }
-        countdown.text = "GO !";
-        Destroy(countdown.gameObject, 2f);
+        statusUI.text = "GO !";
     }
 
     private IEnumerator Racing()
     {
         podRacerScript.EnableControls();
-
+        yield return new WaitForSecondsRealtime(2f);
+        statusUI.enabled = false;
         while (winner == null) {
             yield return null;
         }
@@ -105,8 +104,17 @@ public class RaceScript : MonoBehaviour {
 
     private IEnumerator RaceEnding()
     {
-        Debug.Log("gg "+podRacerScript.name);
-        yield return new WaitForSecondsRealtime(5f);
+        statusUI.text = "Finished !";
+        statusUI.enabled = true;
+        yield return new WaitForSecondsRealtime(3f);
+        podRacerScript.DisableControls();
+        statusUI.text = "Going back to the lobby";
+        yield return new WaitForSecondsRealtime(3f);
         LevelManager.instance.GoBackToMainMenu();
+    }
+
+    public void SpawnSparks(Vector3 position, Quaternion rotation)
+    {
+        Instantiate(sparksPrefab, position, rotation);
     }
 }

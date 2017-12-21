@@ -10,7 +10,7 @@ public class PodRacerScript : MonoBehaviour {
 
     private CameraScript podCamera;
     private bool controllable = true;
-    private Pod podCharacteristics;                                 // that way we've got all the characteristics for a particular pod from a scriptable object
+    public Pod podCharacteristics;                                 // that way we've got all the characteristics for a particular pod from a scriptable object
     private bool affectedByPhysics = false;
     private Rigidbody rb;
     private List<CheckpointScript> passedCheckpoints;
@@ -69,23 +69,52 @@ public class PodRacerScript : MonoBehaviour {
 
     #endregion
     
-    /* collisions
+    
+    #region Collisions
+
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("percuté : "+ collision.collider.gameObject.name);
+        speed *= 0.8f;                                                          // that way we really loose speed when hurting an object
+        speedFactor = GetRatioForSpeed((int)(speed));
+
+        if (speed > 1f)
+        {
+            foreach (ContactPoint contact in collision.contacts)
+            {
+                RaceScript.instance.SpawnSparks(contact.point, Quaternion.LookRotation(contact.normal));
+            }
+        }
     }
-    */
+
+    private void OnCollisionStay(Collision collision)
+    {
+        speed = rb.velocity.magnitude;
+        // only spawn sparkles when we are above a precise speed (sparks don't spawn when just stuck to a wall)
+        if (speed > 3f)
+        {
+            foreach (ContactPoint contact in collision.contacts)
+            {
+                RaceScript.instance.SpawnSparks(contact.point, Quaternion.LookRotation(contact.normal));
+            }
+        }
+        
+    }
+    #endregion
+
 
     private void Start () {
         #region Optimizations
 
         rb = GetComponent<Rigidbody>();
         passedCheckpoints = new List<CheckpointScript>();
+
         #endregion
 
         #region Fetching infos from pod characteristics
+
         maxSpeed = podCharacteristics.GetMaxSpeed();
         timeToFullspeed = podCharacteristics.GetTimeToFullSpeed();
+
         #endregion
 
         #region Speed Approximation calculation
