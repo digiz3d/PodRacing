@@ -30,7 +30,7 @@ public class RaceScript : MonoBehaviour {
     private PodRacerScript podRacerScript;
     private PodRacerScript winner;
     private int currentCountdown;
-    
+    private float timeSinceStart = 0f;
 
     // Use this for initialization
     private void Start () {
@@ -98,13 +98,14 @@ public class RaceScript : MonoBehaviour {
         yield return new WaitForSecondsRealtime(2f);
         statusUI.enabled = false;
         while (winner == null) {
+            timeSinceStart += Time.deltaTime;
             yield return null;
         }
     }
 
     private IEnumerator RaceEnding()
     {
-        statusUI.text = "Finished !";
+        statusUI.text = "Finished in "+ timeSinceStart +"";
         statusUI.enabled = true;
         yield return new WaitForSecondsRealtime(3f);
         podRacerScript.DisableControls();
