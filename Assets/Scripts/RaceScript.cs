@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class RaceScript : MonoBehaviour {
     public static RaceScript instance;
@@ -19,14 +20,15 @@ public class RaceScript : MonoBehaviour {
     public CameraScript cameraScript;
     public UIPodSpeedScript uiPodScript;
     public MinimapCameraScript minimapScript;
+    public Text countdown;
+    public CheckpointScript[] checkpoints;
+    public int countdownTime = 4;
 
     private Pod pod;
     private GameObject playerPod;
     private PodRacerScript podRacerScript;
-
-    public CheckpointScript[] checkpoints;
-
     private PodRacerScript winner;
+    private int currentCountdown;
 
     // Use this for initialization
     private void Start () {
@@ -63,16 +65,33 @@ public class RaceScript : MonoBehaviour {
 
     private IEnumerator RaceLoop()
     {
-        yield return StartCoroutine(RaceStarting());
+        yield return StartCoroutine(RacePreparation());
+
+        yield return StartCoroutine(DisplayCountDown());
 
         yield return StartCoroutine(Racing());
 
         yield return StartCoroutine(RaceEnding());
     }
 
-    private IEnumerator RaceStarting()
+    private IEnumerator RacePreparation()
     {
         yield return new WaitForSecondsRealtime(5f);
+    }
+
+    private IEnumerator DisplayCountDown()
+    {
+        currentCountdown = countdownTime;
+        while(currentCountdown > 0)
+        {
+            Debug.Log("ah");
+            yield return new WaitForSecondsRealtime(1f);
+            currentCountdown--;
+            countdown.text = currentCountdown + "";
+            Debug.Log("bh");
+        }
+        countdown.text = "GO !";
+        Destroy(countdown.gameObject, 2f);
     }
 
     private IEnumerator Racing()
