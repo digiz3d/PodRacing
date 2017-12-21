@@ -3,6 +3,7 @@
 public class MoneyManager : MonoBehaviour {
 
     public static MoneyManager instance;
+    public static string currency = "truguts";
 
     public int money = 0;
 

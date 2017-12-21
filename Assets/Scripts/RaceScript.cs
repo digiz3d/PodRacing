@@ -108,8 +108,12 @@ public class RaceScript : MonoBehaviour {
         statusUI.text = "Finished in "+ timeSinceStart +"";
         statusUI.enabled = true;
         yield return new WaitForSecondsRealtime(3f);
+        int moneyWon = 50000;
+        MoneyManager.instance.AddMoney(moneyWon);
+        statusUI.text = "You won " + moneyWon + " " + MoneyManager.currency;
+        yield return new WaitForSecondsRealtime(3f);
         podRacerScript.DisableControls();
-        statusUI.text = "Going back to the lobby";
+        statusUI.text = "Going back to the lobby...";
         yield return new WaitForSecondsRealtime(3f);
         LevelManager.instance.GoBackToMainMenu();
     }
