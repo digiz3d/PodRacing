@@ -7,19 +7,24 @@ public class PodRacerScript : MonoBehaviour {
     public GameObject hoverPoint;
     public LayerMask hoverMask;                                     // so we don't Raycast ourself or other pods
     public GameObject mesh;
+    public ParticleSystem[] engineParticleSystems;
+    public float minEngineParticleSpeed;
+    public float maxEngineParticleSpeed;
 
     private CameraScript podCamera;
-    private bool controllable = true;
+    private bool controllable = false;
     public Pod podCharacteristics;                                 // that way we've got all the characteristics for a particular pod from a scriptable object
     private bool affectedByPhysics = false;
     private Rigidbody rb;
     private List<CheckpointScript> passedCheckpoints;
     private int currentLap;
 
+    public ParticleSystem.MinMaxCurve minmaxc;
+
     #region Acceleration settings
 
     public AnimationCurve accelCurve;
-    private float timeToFullAcceleration = 0.1f;
+    private float timeToFullAcceleration = 1f;
     private float accelFactor = 0f;
 
     #endregion
@@ -68,8 +73,11 @@ public class PodRacerScript : MonoBehaviour {
     private bool right;
 
     #endregion
-    
-    
+
+    #region Engine particle system settings
+        
+    #endregion
+
     #region Collisions
 
     private void OnCollisionEnter(Collision collision)
@@ -112,8 +120,11 @@ public class PodRacerScript : MonoBehaviour {
 
         #region Fetching infos from pod characteristics
 
-        maxSpeed = podCharacteristics.GetMaxSpeed();
-        timeToFullspeed = podCharacteristics.GetTimeToFullSpeed();
+        if (podCharacteristics != null)
+        {
+            maxSpeed = podCharacteristics.GetMaxSpeed();
+            timeToFullspeed = podCharacteristics.GetTimeToFullSpeed();
+        }
 
         #endregion
 
@@ -232,7 +243,18 @@ public class PodRacerScript : MonoBehaviour {
 
         #endregion
 
+        #region Engine Effects
+
+        float particleSpeed = Mathf.Lerp(minEngineParticleSpeed, maxEngineParticleSpeed, accelFactor);
+        
+        foreach (ParticleSystem ps in engineParticleSystems)
+        {
+            ParticleSystem.MainModule m = ps.main;
+            m.startSpeed = particleSpeed;            
         }
+
+        #endregion
+    }
     
     private void FixedUpdate()
     {
